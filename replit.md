@@ -43,8 +43,39 @@ endpoints, and admin endpoints gated by `ADMIN_API_TOKEN`. D1 migrations in
 tuned inline HTML in the runtime plus MJML sources compiled at deploy time.
 Turnstile + Cloudflare unsafe rate-limit bindings guard public POSTs.
 Local dev: `cd workers && cp .dev.vars.example .dev.vars && npm install &&
-npm run migrate:local && npm run dev`. Stripe checkout + webhook glue lands
-in the next task.
+npm run migrate:local && npm run dev`.
+
+### Quote & Stripe Checkout flow
+- `POST /api/quotes` collects company / contact / country / deployment site
+  / use case / optional VAT ID; persists to D1, validates EU VAT IDs against
+  VIES, FX-converts the canonical USD pricing into the customer's local
+  currency (Stripe-supported subset, daily-cached in KV at `fx:usd:v1`), and
+  emails a 30-day signed link via Resend.
+- `/quote/?id=&t=` is the customer-facing review page (`pages/quote.html`)
+  that hydrates from `GET /api/quotes/:id?t=…` and offers a printable PDF
+  (`/api/quotes/:id/pdf` — Browser Rendering when `BROWSER` is bound, otherwise
+  printable HTML cached to R2 at `quotes/{id}.pdf`).
+- `POST /api/quotes/:id/checkout` builds a Stripe Checkout Session in
+  `payment` mode for the 20% deposit with billing + shipping address required,
+  Stripe Tax + tax-id collection on, multi-method (card, ACH for USD, SEPA for
+  EUR, customer-balance bank transfer where supported). Idempotency key:
+  `axal:quote:{id}:checkout:v1`.
+- `POST /api/stripe/webhook` verifies `Stripe-Signature` (HMAC-SHA256 over
+  `t.body`, ±5 min tolerance), persists each event to `stripe_events` for
+  idempotent dispatch, and handles `checkout.session.completed`,
+  `payment_intent.succeeded|payment_failed`, `invoice.paid|payment_failed`,
+  `charge.refunded`, `charge.dispute.created`. On checkout completion an
+  order is materialized (status `reserved`), the customer is upserted, the
+  quote is marked accepted, and a deposit-received email is sent.
+- Admin endpoints: `POST /admin/orders/:id/invoice-balance` creates Stripe
+  invoice items + finalized invoice for the manual 80% balance billing;
+  `POST /admin/refunds` enforces the policy bands (100% within 14 days, 50%
+  within 30, 0% once `in_production`/`shipping`/`delivered`) with optional
+  `override` flag, and executes the Stripe refund. All Stripe writes use
+  deterministic idempotency keys.
+- Migration `0007_quote_stripe.sql` adds quote contact-detail / FX / VAT /
+  Stripe linkage columns and creates `stripe_events` (event ledger) +
+  `refunds` (admin refund ledger).
 
 ## Catalog data
 Canonical product data lives in `_data/`:

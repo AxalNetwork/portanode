@@ -17,6 +17,11 @@ layout: default
 
   <div id="axal-configurator" class="mt-8" data-cfg-mount></div>
 
+  <script>
+    // Inject backend wiring before the configurator bundle boots.
+    window.AXAL_API_BASE = {{ site.api_base_url | default: '' | jsonify }};
+    window.AXAL_TURNSTILE_SITE_KEY = {{ site.turnstile_site_key | default: '' | jsonify }};
+  </script>
   <script type="module" src="{{ '/assets/configurator/bundle.js' | relative_url }}"></script>
 
   <div class="mt-12 prose-axal text-sm text-axal-gray-700">

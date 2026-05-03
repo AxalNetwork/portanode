@@ -1,0 +1,179 @@
+---
+layout: page
+permalink: /quote/
+title: Your AXAL quote
+eyebrow: Quote
+subtitle: Review your formal quote, download a PDF, and accept to pay your reservation deposit.
+description: Review and accept your AXAL quote. Pay the 20% reservation deposit via Stripe Checkout to secure your manufacturing slot.
+---
+<div id="quote-app" class="max-w-4xl mx-auto px-4 py-10" data-api="{{ site.api_base_url | default: '' }}">
+  <div id="quote-loading" class="text-gray-500">Loading your quote…</div>
+
+  <div id="quote-error" class="hidden rounded-lg border border-red-300 bg-red-50 p-6 text-red-800">
+    <h2 class="font-semibold mb-1">We couldn't load this quote</h2>
+    <p id="quote-error-msg" class="text-sm"></p>
+    <p class="text-sm mt-2">Need help? <a class="underline" href="/contact/">Contact us</a> with your quote ID.</p>
+  </div>
+
+  <article id="quote-card" class="hidden">
+    <header class="mb-6 flex items-start justify-between gap-4 flex-wrap">
+      <div>
+        <div class="text-purple-700 font-bold tracking-wider text-sm">QUOTE</div>
+        <h1 class="text-3xl font-semibold" id="q-id"></h1>
+        <p class="text-gray-500 text-sm">Issued <span id="q-issued"></span> · Valid until <span id="q-expires"></span></p>
+      </div>
+      <div class="flex gap-2">
+        <a id="q-pdf" href="#" target="_blank" rel="noopener" class="border border-gray-300 hover:border-gray-500 px-4 py-2 rounded text-sm">Download PDF</a>
+      </div>
+    </header>
+
+    <section class="grid sm:grid-cols-2 gap-4 text-sm mb-8">
+      <div>
+        <span class="block text-gray-500 uppercase tracking-wider text-xs">Bill to</span>
+        <span id="q-billto-line1"></span>
+        <span class="block" id="q-billto-line2"></span>
+        <span class="block" id="q-billto-line3"></span>
+      </div>
+      <div><span class="block text-gray-500 uppercase tracking-wider text-xs">Region</span><span id="q-region"></span></div>
+      <div><span class="block text-gray-500 uppercase tracking-wider text-xs">Deployment</span><span id="q-deploy"></span></div>
+      <div><span class="block text-gray-500 uppercase tracking-wider text-xs">Use case</span><span id="q-usecase"></span></div>
+    </section>
+
+    <section class="border rounded-lg overflow-hidden mb-8">
+      <table class="w-full text-sm">
+        <tbody>
+          <tr><td class="px-4 py-2 text-gray-500">Subtotal</td><td class="px-4 py-2 text-right" id="q-subtotal"></td></tr>
+          <tr id="q-row-cust" class="hidden"><td class="px-4 py-2 text-gray-500">Customization</td><td class="px-4 py-2 text-right" id="q-customization"></td></tr>
+          <tr id="q-row-exp" class="hidden"><td class="px-4 py-2 text-gray-500">Expedite</td><td class="px-4 py-2 text-right" id="q-expedite"></td></tr>
+          <tr><td class="px-4 py-2 text-gray-500">Freight (est.)</td><td class="px-4 py-2 text-right" id="q-freight"></td></tr>
+          <tr><td class="px-4 py-2 text-gray-500">Tax</td><td class="px-4 py-2 text-right">Calculated at checkout</td></tr>
+          <tr class="border-t-2 border-black bg-purple-50"><td class="px-4 py-3 font-semibold">Total</td><td class="px-4 py-3 text-right font-semibold" id="q-total"></td></tr>
+          <tr><td class="px-4 py-2 text-purple-800 font-medium">Reservation deposit (20%)</td><td class="px-4 py-2 text-right text-purple-800 font-medium" id="q-deposit"></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="rounded-lg bg-gray-50 border p-5 mb-8 text-sm text-gray-700">
+      <p class="mb-2"><strong>What you're paying for:</strong> the 20% deposit secures your manufacturing slot. Tax, ACH, SEPA, and bank-transfer options are available at checkout. We'll invoice the remaining 80% when production is scheduled.</p>
+      <p>Refund policy: 100% within 14 days · 50% within 30 days · 0% once your slot is confirmed.</p>
+    </section>
+
+    <div id="q-cancelled" class="hidden mb-4 text-sm text-gray-600 border border-gray-300 rounded-lg p-4">
+      Checkout was cancelled — your quote is still active. Click below to try again.
+    </div>
+
+    <div class="flex gap-3 flex-wrap">
+      <button id="q-accept" class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded font-semibold">Accept and pay deposit</button>
+      <a href="/configure/" class="px-6 py-3 rounded border border-gray-300 hover:border-gray-500">Adjust configuration</a>
+    </div>
+    <p id="q-accept-err" class="hidden text-sm text-red-700 mt-3"></p>
+  </article>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('quote-app');
+  var api = root.dataset.api || '';
+  var params = new URLSearchParams(location.search);
+  // Two URL shapes are supported: pretty `/quote/{id}/?t=...` (preferred,
+  // forwarded by netlify/cloudflare rewrites) and legacy `/quote/?id=...&t=...`.
+  var pathMatch = location.pathname.match(/\/quote\/([^/?#]+)\/?$/);
+  var id = (pathMatch && decodeURIComponent(pathMatch[1])) || params.get('id');
+  var token = params.get('t') || params.get('token') || '';
+  var cancelled = params.get('cancelled') === '1';
+
+  function $(sel) { return document.querySelector(sel); }
+  function setText(sel, v) { var el = $(sel); if (el) el.textContent = (v == null ? '' : String(v)); }
+  // Quote amounts are stored canonically in USD cents on the server. To match
+  // what the customer will see on the Stripe Checkout page (and on the PDF /
+  // email), we convert to the presentment currency client-side using the
+  // server-resolved `fxRate` snapshotted at quote creation time.
+  function display(usdCents, fxRate, currency) {
+    if (currency === 'USD' || !fxRate) return usdCents;
+    return Math.round(usdCents * fxRate);
+  }
+  function fmt(amount, currency) {
+    try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(amount / 100); }
+    catch (e) { return (amount / 100).toFixed(2) + ' ' + currency; }
+  }
+  function showError(msg) {
+    $('#quote-loading').classList.add('hidden');
+    $('#quote-error').classList.remove('hidden');
+    setText('#quote-error-msg', msg);
+  }
+  if (!id || !token) {
+    showError('Missing quote ID or signed link. Check the link from your email.');
+    return;
+  }
+
+  var qs = '?t=' + encodeURIComponent(token);
+  fetch(api + '/api/quotes/' + encodeURIComponent(id) + qs, { credentials: 'omit' })
+    .then(function (r) {
+      if (!r.ok) return r.json().then(function (j) { throw new Error(j.error && j.error.message || 'Failed to load quote'); });
+      return r.json();
+    })
+    .then(function (j) {
+      var q = j.data;
+      $('#quote-loading').classList.add('hidden');
+      $('#quote-card').classList.remove('hidden');
+      setText('#q-id', q.id);
+      setText('#q-issued', new Date(q.createdAt).toISOString().slice(0, 10));
+      setText('#q-expires', new Date(q.expiresAt).toISOString().slice(0, 10));
+      // Render bill-to as plain text nodes — never innerHTML — to prevent any
+      // XSS via attacker-controlled company / contact fields.
+      setText('#q-billto-line1', q.contact.company || q.contact.name || q.contact.email);
+      setText('#q-billto-line2', q.contact.email);
+      setText('#q-billto-line3', q.contact.country || '');
+      setText('#q-region', (q.region || '').toUpperCase());
+      setText('#q-deploy', q.deploymentSite || '—');
+      setText('#q-usecase', q.useCase || '—');
+      var fx = q.fxRate || 1;
+      var cur = q.currency || 'USD';
+      setText('#q-subtotal', fmt(display(q.subtotalCents, fx, cur), cur));
+      setText('#q-freight', fmt(display(q.freightCents, fx, cur), cur));
+      setText('#q-total', fmt(display(q.totalCents, fx, cur), cur));
+      setText('#q-deposit', fmt(display(q.depositCents, fx, cur), cur));
+      if (q.customizationFeeCents) {
+        $('#q-row-cust').classList.remove('hidden');
+        setText('#q-customization', fmt(display(q.customizationFeeCents, fx, cur), cur));
+      }
+      if (q.expediteFeeCents) {
+        $('#q-row-exp').classList.remove('hidden');
+        setText('#q-expedite', fmt(display(q.expediteFeeCents, fx, cur), cur));
+      }
+      $('#q-pdf').href = api + '/api/quotes/' + encodeURIComponent(q.id) + '/pdf' + qs;
+      if (cancelled) $('#q-cancelled').classList.remove('hidden');
+      if (q.status === 'accepted') {
+        $('#q-accept').disabled = true;
+        setText('#q-accept', 'Already accepted — see your account');
+      }
+    })
+    .catch(function (err) { showError(err.message); });
+
+  $('#q-accept').addEventListener('click', function () {
+    var btn = $('#q-accept');
+    btn.disabled = true;
+    setText('#q-accept', 'Redirecting to checkout…');
+    $('#q-accept-err').classList.add('hidden');
+    fetch(api + '/api/quotes/' + encodeURIComponent(id) + '/checkout' + qs, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{}',
+    })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (j) { throw new Error(j.error && j.error.message || 'Checkout failed'); });
+        return r.json();
+      })
+      .then(function (j) {
+        if (j.data && j.data.url) location.href = j.data.url;
+        else throw new Error('No checkout URL returned');
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        setText('#q-accept', 'Accept and pay deposit');
+        $('#q-accept-err').classList.remove('hidden');
+        setText('#q-accept-err', err.message);
+      });
+  });
+})();
+</script>

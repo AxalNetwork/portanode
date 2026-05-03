@@ -13,6 +13,10 @@ TURNSTILE_SECRET_KEY="0x4AAAAAAA-test-secret"
 # Admin API token (long, random; rotate via wrangler secret put)
 ADMIN_API_TOKEN="replace-me-with-a-long-random-token"
 
-# Stripe keys (used by the next task; placeholders here so dev runs cleanly)
+# Stripe (https://dashboard.stripe.com/apikeys)
+# - STRIPE_SECRET_KEY: test mode `sk_test_…` for local dev / staging.
+# - STRIPE_WEBHOOK_SECRET: from `stripe listen --forward-to localhost:8787/api/stripe/webhook`.
+# Both empty → checkout endpoints fail with a clear error and the webhook
+# rejects all signatures, so the worker still boots cleanly without Stripe.
 STRIPE_SECRET_KEY=""
 STRIPE_WEBHOOK_SECRET=""

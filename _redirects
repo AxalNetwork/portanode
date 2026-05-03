@@ -1,0 +1,5 @@
+# Pretty quote URLs: /quote/Q-XXXX/?t=... → static /quote/?id=Q-XXXX&t=...
+# Cloudflare Pages reads this file (also Netlify-compatible). The trailing
+# query string is preserved automatically on rewrites (status 200).
+/quote/:id/    /quote/?id=:id    200
+/quote/:id     /quote/?id=:id    200

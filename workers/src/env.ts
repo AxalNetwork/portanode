@@ -26,6 +26,10 @@ export interface Env {
   ADMIN_API_TOKEN: string;
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+
+  // Optional: Cloudflare Browser Rendering binding for server-side PDF
+  // generation. When unbound, /api/quotes/:id/pdf returns printable HTML.
+  BROWSER?: { fetch: (req: Request) => Promise<Response> };
 }
 
 // Cloudflare runtime rate limit binding (typed loosely; types ship with workers-types eventually).

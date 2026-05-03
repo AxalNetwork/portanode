@@ -17,6 +17,10 @@
   let shareUrl = '';
   let toast = '';
   let toastTimer;
+  // API base for backend calls (formal-quote submission, etc.). Defaults to
+  // same-origin so Cloudflare Pages → Worker rewrites apply transparently.
+  const apiBase = (typeof window !== 'undefined' && window.AXAL_API_BASE) || '';
+  const turnstileSiteKey = (typeof window !== 'undefined' && window.AXAL_TURNSTILE_SITE_KEY) || '';
 
   function flash(msg) {
     toast = msg;
@@ -135,7 +139,16 @@
     </div>
 
     <div class="cfg-pane" class:is-active={activeTab === 'specs'} style="grid-column: 3;">
-      <SpecLedger {catalog} {onSave} {onShare} {onDownloadPdf} {savedId} {shareUrl} />
+      <SpecLedger
+        {catalog}
+        {onSave}
+        {onShare}
+        {onDownloadPdf}
+        {savedId}
+        {shareUrl}
+        apiBase={apiBase}
+        turnstileSiteKey={turnstileSiteKey}
+      />
     </div>
   </div>
 {/if}

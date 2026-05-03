@@ -10,6 +10,15 @@ author:
   name: "AXAL"
   email: "hello@axal.dev"
 
+# Backend API base — overridden per-environment by build env. Empty = same-
+# origin (Cloudflare Pages → Worker rewrites apply).
+api_base_url: ""
+
+# Cloudflare Turnstile site key (public). The Worker validates the token
+# server-side using TURNSTILE_SECRET_KEY. The 1x… key is the documented
+# always-passes test key, safe to keep in the repo for dev.
+turnstile_site_key: "1x00000000000000000000AA"
+
 brand:
   primary: "#6B21A8"
   primary_light: "#A855F7"

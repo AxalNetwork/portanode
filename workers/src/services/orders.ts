@@ -164,6 +164,7 @@ function hydrateOrder(r: Record<string, unknown>) {
     status: String(r.status),
     region: String(r.region),
     currency: String(r.currency),
+    fxRate: Number(r.fx_rate ?? 1),
     subtotalCents: Number(r.subtotal_cents),
     freightCents: Number(r.freight_cents),
     taxCents: Number(r.tax_cents),

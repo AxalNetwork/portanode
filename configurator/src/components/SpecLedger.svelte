@@ -1,12 +1,15 @@
 <script>
   import { config, evaluation, setRegion, setSiteSize, readOnly } from '../stores/config.js';
   import { formatCurrency, formatNumber } from '../lib/catalog.js';
+  import QuoteForm from './QuoteForm.svelte';
   export let catalog;
   export let onSave = () => {};
   export let onShare = () => {};
   export let onDownloadPdf = () => {};
   export let savedId = null;
   export let shareUrl = '';
+  export let apiBase = '';
+  export let turnstileSiteKey = '';
 
   $: ev = $evaluation;
 </script>
@@ -77,4 +80,6 @@
         <button class="cfg-btn" type="button" on:click={() => navigator.clipboard?.writeText(shareUrl)}>Copy</button>
       </div>
     {/if}
+
+    <QuoteForm {savedId} {apiBase} {turnstileSiteKey} />
 </div>
