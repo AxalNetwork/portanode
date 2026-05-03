@@ -1,0 +1,31 @@
+---
+layout: default
+title: Use cases
+description: How AXAL stacks deploy across research, agriculture, telecom, mining, NGOs, defense, hospitality, edge compute, and crypto mining.
+permalink: /use-cases/
+---
+
+<section class="container-page py-14">
+  <div class="text-xs font-mono uppercase tracking-wider text-axal-purple">By industry</div>
+  <h1 class="mt-2">Use cases</h1>
+  <p class="mt-4 max-w-2xl text-lg text-axal-gray-700">Nine industries, nine playbooks. Each page links back into a configurable stack pre-loaded for that environment.</p>
+
+  <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {% assign cases = site.use_cases | sort: "order" %}
+    {% for u in cases %}
+      <li>
+        <a href="{{ u.url | relative_url }}" class="card group block no-underline h-full">
+          <div class="text-xs font-mono uppercase tracking-wider text-axal-gray">{{ u.industry | default: u.title }}</div>
+          <h3 class="mt-2 text-xl font-semibold text-axal-ink group-hover:text-axal-purple">{{ u.title }}</h3>
+          {% if u.summary %}<p class="mt-2 text-sm text-axal-gray-700">{{ u.summary }}</p>{% endif %}
+          <div class="mt-5 flex items-center justify-between text-sm">
+            {% if u.stack %}<span class="badge font-mono text-[11px]">stack: {{ u.stack }}</span>{% else %}<span></span>{% endif %}
+            <span class="font-medium text-axal-purple">Read →</span>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include cta.html %}

@@ -11,29 +11,77 @@ layout: default
   <header class="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-start">
     <div>
       <span class="badge badge-purple">Stack</span>
+      {% if page.tier %}<span class="badge font-mono ml-1">{{ page.tier }}</span>{% endif %}
       <h1 class="mt-3">{{ page.title }}</h1>
       {% if page.summary %}<p class="mt-4 max-w-2xl text-lg text-axal-gray-700">{{ page.summary }}</p>{% endif %}
       <div class="mt-6 flex flex-wrap gap-3">
-        <a href="{{ '/configure/' | relative_url }}?stack={{ page.slug }}" class="btn btn-primary">Configure stack</a>
-        <a href="{{ '/modules/' | relative_url }}" class="btn btn-outline">See modules</a>
+        <a href="{{ '/configure/' | relative_url }}?stack={{ page.slug }}" class="btn btn-primary">Configure this stack</a>
+        <a href="{{ '/modules/' | relative_url }}" class="btn btn-outline">See all modules</a>
       </div>
+      <dl class="mt-8 grid max-w-lg grid-cols-3 gap-6">
+        {% if page.footprint %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Footprint</dt><dd class="mt-1 font-mono text-lg">{{ page.footprint }}</dd></div>{% endif %}
+        {% if page.lead_time %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Lead time</dt><dd class="mt-1 font-mono text-lg">{{ page.lead_time }}</dd></div>{% endif %}
+        {% if page.capacity %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Capacity</dt><dd class="mt-1 font-mono text-lg">{{ page.capacity }}</dd></div>{% endif %}
+      </dl>
     </div>
     <aside class="card">
       {% if page.price %}
         {% include price-display.html amount=page.price unit=page.price_unit %}
-        <div class="mt-1 text-xs text-axal-gray">Starting price.</div>
+        <div class="mt-1 text-xs text-axal-gray">Starting price · FOB factory</div>
       {% endif %}
       {% if page.modules %}
-        <div class="mt-4 text-xs font-mono uppercase tracking-wider text-axal-gray">Includes</div>
-        <ul class="mt-2 flex flex-wrap gap-1.5">
-          {% for m in page.modules %}<li class="badge font-mono text-[11px]">{{ m }}</li>{% endfor %}
+        <div class="mt-5 text-xs font-mono uppercase tracking-wider text-axal-gray">Includes</div>
+        <ul class="mt-2 space-y-1.5">
+          {% for m in page.modules %}
+            <li class="flex items-center justify-between gap-2 text-sm">
+              <a href="{{ '/modules/' | append: m.slug | append: '/' | relative_url }}" class="text-axal-ink no-underline hover:text-axal-purple">{{ m.name }}</a>
+              <span class="font-mono text-xs text-axal-gray">×{{ m.qty | default: 1 }}</span>
+            </li>
+          {% endfor %}
         </ul>
       {% endif %}
     </aside>
   </header>
 
-  <div class="prose-axal mt-12">
-    {{ content }}
-  </div>
+  <section class="mt-14">
+    <h2>Interconnect diagram</h2>
+    <div class="mt-6 rounded-card border border-axal-gray-100 bg-white p-8">
+      <svg viewBox="0 0 800 220" class="w-full h-auto" role="img" aria-label="Module interconnect diagram">
+        <defs>
+          <pattern id="grid-{{ page.slug }}" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M20 0 L0 0 0 20" fill="none" stroke="#E5E5E0" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="800" height="220" fill="url(#grid-{{ page.slug }})"/>
+        {% assign count = page.modules | size %}
+        {% assign step = 760.0 | divided_by: count %}
+        {% for m in page.modules %}
+          {% assign x = forloop.index0 | times: step | plus: 20 %}
+          <g transform="translate({{ x }} 60)">
+            <rect width="{{ step | minus: 16 }}" height="100" rx="10" fill="#FAFAF7" stroke="#6B21A8" stroke-width="1.5"/>
+            <text x="{{ step | minus: 16 | divided_by: 2 }}" y="44" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#6B21A8">{{ m.slug | upcase }}</text>
+            <text x="{{ step | minus: 16 | divided_by: 2 }}" y="68" text-anchor="middle" font-family="Geist, sans-serif" font-size="13" font-weight="600" fill="#0B0B0F">{{ m.name }}</text>
+            <text x="{{ step | minus: 16 | divided_by: 2 }}" y="86" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#6B7280">×{{ m.qty | default: 1 }}</text>
+          </g>
+          {% unless forloop.last %}
+            {% assign cx = x | plus: step | minus: 16 %}
+            <line x1="{{ cx }}" y1="110" x2="{{ cx | plus: 16 }}" y2="110" stroke="#A855F7" stroke-width="2"/>
+          {% endunless %}
+        {% endfor %}
+        <text x="400" y="200" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#6B7280">shared bus · 800 V DC · 10 GbE · process water</text>
+      </svg>
+    </div>
+  </section>
+
+  {% if page.bom %}
+    <section class="mt-14">
+      <h2>Bill of materials</h2>
+      <div class="mt-6">{% include spec-table.html specs=page.bom %}</div>
+    </section>
+  {% endif %}
+
+  {% if content and content != "" %}
+    <div class="prose-axal mt-14">{{ content }}</div>
+  {% endif %}
 </article>
 {% include cta.html heading="Make this stack yours." %}

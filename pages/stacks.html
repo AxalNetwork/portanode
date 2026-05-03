@@ -1,0 +1,21 @@
+---
+layout: default
+title: Stacks
+description: Pre-configured AXAL stacks for research, healthcare, edge compute, agriculture, defense, and disaster response.
+permalink: /stacks/
+---
+
+<section class="container-page py-14">
+  <div class="text-xs font-mono uppercase tracking-wider text-axal-purple">Templates</div>
+  <h1 class="mt-2">Stacks</h1>
+  <p class="mt-4 max-w-2xl text-lg text-axal-gray-700">Seven proven combinations of modules tuned for the most common AXAL deployments. Configure as-is, or use any stack as a starting point in the configurator.</p>
+
+  <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {% assign stacks = site.stacks | sort: "order" %}
+    {% for s in stacks %}
+      <li>{% include stack-card.html stack=s %}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include cta.html heading="Pick a starting point. Make it yours." %}

@@ -1,0 +1,21 @@
+---
+layout: default
+title: Modules
+description: Eight container-shippable AXAL modules — power, water, food, shelter, compute, care, education — that interconnect on a single bus.
+permalink: /modules/
+---
+
+<section class="container-page py-14">
+  <div class="text-xs font-mono uppercase tracking-wider text-axal-purple">Catalog</div>
+  <h1 class="mt-2">Modules</h1>
+  <p class="mt-4 max-w-2xl text-lg text-axal-gray-700">Every AXAL module is a 20- or 40-ft container with the same power, data, and fluid couplings. Mix any combination — the configurator validates the rest.</p>
+
+  <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {% assign mods = site.modules | sort: "order" %}
+    {% for m in mods %}
+      <li>{% include module-card.html module=m %}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include cta.html heading="Snap them together." body="Drop modules onto a site, validate, and quote — in the configurator." %}

@@ -21,11 +21,17 @@ purchase. This repo currently contains the brand foundation and theme shell.
   `jekyll-include-cache`
 
 ## Collections
-- `_modules/` → `/modules/:slug/`
-- `_stacks/` → `/stacks/:slug/`
-- `_use_cases/` → `/use-cases/:slug/`
+- `_modules/` → `/modules/:slug/` — 8 modules (Core, Volt, Flow, Grow, Shell, Cycle, Care, Learn)
+- `_stacks/` → `/stacks/:slug/` — 7 reference stacks
+- `_use_cases/` → `/use-cases/:slug/` — 9 industry pages
 - `_specs/` (data only, not output)
-- `_legal/` → `/legal/:slug/`
+- `_legal/` → `/legal/:slug/` — 5 legal docs (terms-of-sale, privacy, refund, export, cookies)
+- `_posts/` — 6 launch blog posts
+
+## Static pages (in `pages/`)
+`/modules/`, `/stacks/`, `/use-cases/`, `/specs/` (gated download form),
+`/sustainability/`, `/shipping/` (SVG world tier map), `/financing/`,
+`/about/`, `/blog/`
 
 ## Layouts
 `default.html` → `page.html` / `module.html` / `stack.html` / `post.html` /

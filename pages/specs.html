@@ -1,0 +1,81 @@
+---
+layout: default
+title: Specs
+description: Download the complete AXAL spec sheet — module specifications, interconnect detail, and stack BOMs in one PDF.
+permalink: /specs/
+---
+
+<section class="container-page py-14">
+  <div class="grid gap-12 md:grid-cols-[1.2fr_1fr] md:items-start">
+    <div>
+      <div class="text-xs font-mono uppercase tracking-wider text-axal-purple">Spec hub</div>
+      <h1 class="mt-2">The AXAL spec book.</h1>
+      <p class="mt-4 max-w-2xl text-lg text-axal-gray-700">
+        Every module specification, the interconnect drawing pack, and stack BOMs — 96 pages, one PDF. Updated quarterly.
+      </p>
+
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <div class="card">
+          <div class="font-mono text-xs uppercase tracking-wider text-axal-gray">Inside</div>
+          <ul class="mt-3 space-y-2 text-sm text-axal-gray-700">
+            <li>Eight module datasheets</li>
+            <li>Interconnect mechanical & electrical drawings</li>
+            <li>Seven stack reference BOMs</li>
+            <li>Compliance, certifications, and ITP samples</li>
+            <li>Shipping tier map and lead times</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="font-mono text-xs uppercase tracking-wider text-axal-gray">For</div>
+          <ul class="mt-3 space-y-2 text-sm text-axal-gray-700">
+            <li>Procurement and tender teams</li>
+            <li>Site engineers and EPCM partners</li>
+            <li>Funders and lenders</li>
+            <li>Compliance and legal reviewers</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="mt-12">What you'll get by email</h2>
+      <p class="mt-3 text-axal-gray-700">A direct PDF link, plus a follow-up note with the latest revision date and any addenda. We never share your email outside AXAL.</p>
+    </div>
+
+    <aside class="card">
+      <h2 class="text-xl font-semibold">Get the spec book</h2>
+      <p class="mt-2 text-sm text-axal-gray-700">Drop your email — we'll send the current revision (PDF, ~12 MB) within a minute.</p>
+      <form action="/api/spec-download" method="post" class="mt-5 grid gap-3" data-axal-spec-form>
+        <label class="grid gap-1 text-sm">
+          <span class="font-mono text-xs uppercase tracking-wider text-axal-gray">Work email</span>
+          <input type="email" name="email" required placeholder="you@company.com" class="rounded-md border border-axal-gray-200 bg-white px-3 py-2 text-sm focus:border-axal-purple focus:outline-none focus:ring-2 focus:ring-axal-purple-lighter/40" />
+        </label>
+        <label class="grid gap-1 text-sm">
+          <span class="font-mono text-xs uppercase tracking-wider text-axal-gray">Organisation</span>
+          <input type="text" name="organisation" required placeholder="Company / agency" class="rounded-md border border-axal-gray-200 bg-white px-3 py-2 text-sm focus:border-axal-purple focus:outline-none focus:ring-2 focus:ring-axal-purple-lighter/40" />
+        </label>
+        <label class="grid gap-1 text-sm">
+          <span class="font-mono text-xs uppercase tracking-wider text-axal-gray">Use case</span>
+          <select name="use_case" class="rounded-md border border-axal-gray-200 bg-white px-3 py-2 text-sm focus:border-axal-purple focus:outline-none">
+            <option value="">Select…</option>
+            <option>Research</option>
+            <option>Agriculture</option>
+            <option>Telecom</option>
+            <option>Mining</option>
+            <option>NGO / humanitarian</option>
+            <option>Defense</option>
+            <option>Hospitality</option>
+            <option>Edge compute</option>
+            <option>Crypto mining</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label class="flex items-start gap-2 text-xs text-axal-gray-700">
+          <input type="checkbox" name="consent" required class="mt-0.5" />
+          <span>I agree to AXAL's <a href="/legal/privacy/">Privacy</a> notice. Unsubscribe anytime.</span>
+        </label>
+        <button type="submit" class="btn btn-primary mt-2">Email me the spec book</button>
+        <p class="text-xs text-axal-gray">We respond within a minute. If you don't see the email, check spam for sender <span class="font-mono">specs@axal.dev</span>.</p>
+      </form>
+    </aside>
+  </div>
+</section>
+{% include cta.html heading="Already know what you need?" body="Skip the PDF and start building in the configurator." primary_text="Open configurator" secondary_text="See use cases" secondary_url="/use-cases/" %}

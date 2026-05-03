@@ -10,27 +10,89 @@ layout: default
 
   <header class="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-start">
     <div>
-      {% if page.category %}<div class="text-xs font-mono uppercase tracking-wider text-axal-purple">{{ page.category }}</div>{% endif %}
+      {% if page.category %}<div class="text-xs font-mono uppercase tracking-wider text-axal-purple">{{ page.category }} · {{ page.sku }}</div>{% endif %}
       <h1 class="mt-2">{{ page.title }}</h1>
       {% if page.summary %}<p class="mt-4 max-w-2xl text-lg text-axal-gray-700">{{ page.summary }}</p>{% endif %}
       <div class="mt-6 flex flex-wrap gap-3">
         <a href="{{ '/configure/' | relative_url }}?module={{ page.slug }}" class="btn btn-primary">Add to stack</a>
-        {% if page.datasheet %}<a href="{{ page.datasheet | relative_url }}" class="btn btn-outline">Datasheet</a>{% endif %}
+        <a href="{{ '/specs/' | relative_url }}" class="btn btn-outline">Download spec sheet</a>
       </div>
+      <dl class="mt-8 grid max-w-md grid-cols-3 gap-6">
+        {% if page.lead_time %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Lead time</dt><dd class="mt-1 font-mono text-lg">{{ page.lead_time }}</dd></div>{% endif %}
+        {% if page.footprint %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Footprint</dt><dd class="mt-1 font-mono text-lg">{{ page.footprint }}</dd></div>{% endif %}
+        {% if page.weight %}<div><dt class="text-xs font-mono uppercase tracking-wider text-axal-gray">Weight</dt><dd class="mt-1 font-mono text-lg">{{ page.weight }}</dd></div>{% endif %}
+      </dl>
     </div>
     <aside class="card">
+      <div class="aspect-[4/3] w-full rounded-card bg-gradient-to-br from-axal-purple/15 via-axal-purple-light/20 to-axal-purple-lighter/30 flex items-center justify-center">
+        <div class="text-center">
+          <div class="font-mono text-xs uppercase tracking-widest text-axal-purple">{{ page.sku }}</div>
+          <div class="mt-1 text-3xl font-semibold text-axal-ink">{{ page.title }}</div>
+          <div class="mt-1 text-xs text-axal-gray">render placeholder</div>
+        </div>
+      </div>
       {% if page.price %}
-        {% include price-display.html amount=page.price unit=page.price_unit %}
-        <div class="mt-1 text-xs text-axal-gray">Billed monthly. Cancel anytime.</div>
-      {% endif %}
-      {% if page.specs %}
-        <div class="mt-4">{% include spec-table.html specs=page.specs caption="At a glance" %}</div>
+        <div class="mt-5">
+          {% include price-display.html amount=page.price unit=page.price_unit %}
+          <div class="mt-1 text-xs text-axal-gray">Base configuration. FOB factory.</div>
+        </div>
       {% endif %}
     </aside>
   </header>
 
-  <div class="prose-axal mt-12">
-    {{ content }}
-  </div>
+  {% if page.specs %}
+    <section class="mt-14">
+      <h2>Spec table</h2>
+      <div class="mt-6">{% include spec-table.html specs=page.specs %}</div>
+    </section>
+  {% endif %}
+
+  {% if page.inside %}
+    <section class="mt-14">
+      <h2>What's inside</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {% for it in page.inside %}
+          <li class="card">
+            <div class="font-mono text-xs uppercase tracking-wider text-axal-purple">{{ it.label }}</div>
+            <div class="mt-2 text-axal-ink">{{ it.value }}</div>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if page.compat %}
+    <section class="mt-14">
+      <h2>Interconnect compatibility</h2>
+      <p class="mt-3 max-w-2xl text-axal-gray-700">All AXAL modules share a common power bus, data fabric, and fluid manifold. {{ page.title }} pairs especially well with:</p>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {% for c in page.compat %}
+          <li><a href="{{ '/modules/' | append: c | append: '/' | relative_url }}" class="badge badge-purple no-underline hover:bg-axal-purple-lighter/30">{{ c | upcase }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if page.use_cases %}
+    <section class="mt-14">
+      <h2>Three ways to deploy {{ page.title }}</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-3">
+        {% for u in page.use_cases %}
+          <li class="card">
+            <div class="font-mono text-xs uppercase tracking-wider text-axal-purple">{{ u.industry }}</div>
+            <h3 class="mt-2 text-xl font-semibold">{{ u.title }}</h3>
+            <p class="mt-2 text-sm text-axal-gray-700">{{ u.body }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if content and content != "" %}
+    <div class="prose-axal mt-14">
+      {{ content }}
+    </div>
+  {% endif %}
 </article>
-{% include cta.html %}
+{%- capture cta_heading -%}Drop a {{ page.title }} into your stack.{%- endcapture -%}
+{% include cta.html heading=cta_heading primary_text="Open configurator" %}
