@@ -18,6 +18,15 @@ SESSION_COOKIE_NAME = "axal_session"
 SESSION_TTL_DAYS = "30"
 MAGIC_LINK_TTL_MIN = "15"
 
+# Compliance tunables. Override in environment-specific blocks as needed.
+# Threshold above which orders trigger a KYB hold (USD, plain dollars).
+KYB_THRESHOLD_USD = "250000"
+# OpenSanctions match-score threshold above which a screening flips to
+# `review` (0..1, higher = stricter). Default mirrors the OpenSanctions docs
+# "high-confidence" cut-off for production use.
+SANCTIONS_THRESHOLD = "0.85"
+SANCTIONS_TIMEOUT_MS = "4000"
+
 # --- D1 ---
 [[d1_databases]]
 binding = "DB"

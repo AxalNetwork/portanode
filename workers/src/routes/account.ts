@@ -30,6 +30,7 @@ import {
   updateProfile,
 } from '../services/customers';
 import { createCheckoutSession } from '../stripe/checkout';
+import { countryGate } from '../middleware/country-gate';
 import { logEvent } from '../db/events';
 
 export const account = new Hono<AppContext>();
@@ -153,9 +154,17 @@ account.get('/quotes/:id', async (c) => {
 /** Customer-authenticated checkout: reuses the same Stripe Checkout session
  *  builder as the public quote-token flow. No token is required here because
  *  the session cookie + CSRF already proved ownership. */
-account.post('/quotes/:id/checkout', async (c) => {
-  const customer = c.get('customer')!;
+account.post('/quotes/:id/checkout', countryGate(async (c) => {
+  // Resolve the country up front so the gate can polite-block before we
+  // ever talk to Stripe. Sourced from the quote's contact (which the
+  // customer set when they requested it). The gate logs + 451s on hit.
   const quote = await getQuoteById(c.env, c.req.param('id'));
+  c.set('preloadedQuote', quote ?? null);
+  return quote?.contact.country ?? null;
+}), async (c) => {
+  const customer = c.get('customer')!;
+  const quote = (c.get('preloadedQuote') as Awaited<ReturnType<typeof getQuoteById>> | null)
+    ?? (await getQuoteById(c.env, c.req.param('id')));
   if (!quote || quote.customerId !== customer.id) throw Errors.notFound('Quote not found');
   if (quote.status === 'expired' || quote.expiresAt < Date.now()) {
     throw Errors.badRequest('Quote has expired');

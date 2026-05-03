@@ -101,6 +101,7 @@
       return;
     }
     submitting = true;
+    try { window.axalTrack && window.axalTrack('quote_requested', { country: form.country, useCase: form.useCase, expedite: !!form.expedite }); } catch (e) {}
     try {
       // Build an inline configuration snapshot from the current store so the
       // worker can persist it on our behalf if `savedId` was never round-

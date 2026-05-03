@@ -1,0 +1,169 @@
+{%- comment -%}
+  JSON-LD structured data. Emits the most specific schema that fits the
+  current page based on layout / front-matter, falling back to Organization
+  on every page. Multiple blocks are emitted as separate <script> tags so
+  Google's crawler treats them independently.
+
+  Inputs (page front matter):
+    - layout: 'module' | 'stack' | 'post' | 'legal' | 'page' | 'default'
+    - faqs: [{ q, a }]                  → adds FAQPage
+    - breadcrumbs: [{ name, url }]      → adds BreadcrumbList
+    - product_image: '/path.png'        → overrides default OG for Product
+{%- endcomment -%}
+
+{%- assign _site_url = site.url | append: site.baseurl -%}
+{%- assign _page_url = page.url | absolute_url -%}
+
+{%- comment -%} Organization (sitewide) {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ site.title | jsonify }},
+  "url": {{ _site_url | jsonify }},
+  "logo": {{ "/assets/logos/axal-monogram.svg" | absolute_url | jsonify }},
+  "description": {{ site.description | strip_newlines | jsonify }},
+  "sameAs": []
+}
+</script>
+
+{%- comment -%} WebSite (homepage only) for sitelinks search box. {%- endcomment -%}
+{%- if page.url == "/" -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ site.title | jsonify }},
+  "url": {{ _site_url | jsonify }}
+}
+</script>
+{%- endif -%}
+
+{%- comment -%} Product + Offer for module pages. {%- endcomment -%}
+{%- if page.layout == "module" -%}
+  {%- assign _m = site.data.catalog.modules | where: "id", page.slug | first -%}
+  {%- if _m -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ page.title | jsonify }},
+  "sku": {{ _m.sku | jsonify }},
+  "category": {{ _m.category | jsonify }},
+  "url": {{ _page_url | jsonify }},
+  "description": {{ page.summary | default: page.description | default: site.description | strip_newlines | jsonify }},
+  "brand": { "@type": "Brand", "name": {{ site.title | jsonify }} },
+  "manufacturer": { "@type": "Organization", "name": {{ site.title | jsonify }} },
+  "image": {{ page.product_image | default: "/assets/logos/axal-monogram.svg" | absolute_url | jsonify }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "{{ _m.basePrice }}",
+    "availability": "https://schema.org/InStock",
+    "url": {{ _page_url | jsonify }},
+    "seller": { "@type": "Organization", "name": {{ site.title | jsonify }} },
+    "deliveryLeadTime": {
+      "@type": "QuantitativeValue",
+      "minValue": {{ _m.leadTimeWeeks }},
+      "unitCode": "WEE"
+    }
+  }
+}
+</script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} Product + AggregateOffer for stack pages. {%- endcomment -%}
+{%- if page.layout == "stack" -%}
+  {%- assign _s = site.data.stacks.stacks | where: "id", page.slug | first -%}
+  {%- if _s -%}
+    {%- assign _stack_total = 0 -%}
+    {%- for entry in _s.modules -%}
+      {%- assign _sm = site.data.catalog.modules | where: "id", entry.moduleId | first -%}
+      {%- if _sm -%}
+        {%- assign _qty = entry.qty | default: 1 -%}
+        {%- assign _line = _sm.basePrice | times: _qty -%}
+        {%- assign _stack_total = _stack_total | plus: _line -%}
+      {%- endif -%}
+    {%- endfor -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ page.title | jsonify }},
+  "url": {{ _page_url | jsonify }},
+  "description": {{ _s.summary | default: page.summary | default: site.description | strip_newlines | jsonify }},
+  "brand": { "@type": "Brand", "name": {{ site.title | jsonify }} },
+  "image": {{ page.product_image | default: "/assets/logos/axal-monogram.svg" | absolute_url | jsonify }},
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "USD",
+    "lowPrice": "{{ _stack_total }}",
+    "offerCount": {{ _s.modules | size }},
+    "availability": "https://schema.org/InStock",
+    "url": {{ _page_url | jsonify }}
+  }
+}
+</script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} BlogPosting for posts. {%- endcomment -%}
+{%- if page.layout == "post" -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "url": {{ _page_url | jsonify }},
+  "author": { "@type": "Organization", "name": {{ site.title | jsonify }} },
+  "publisher": { "@type": "Organization", "name": {{ site.title | jsonify }} }
+}
+</script>
+{%- endif -%}
+
+{%- comment -%} BreadcrumbList — explicit list from front matter, or auto-derive
+  for collection items. {%- endcomment -%}
+{%- assign _bc = page.breadcrumbs -%}
+{%- if _bc == nil and page.layout == "module" -%}
+  {%- capture _bc_json -%}[
+    {"@type":"ListItem","position":1,"name":"Modules","item":{{ "/modules/" | absolute_url | jsonify }}},
+    {"@type":"ListItem","position":2,"name":{{ page.title | jsonify }},"item":{{ _page_url | jsonify }}}
+  ]{%- endcapture -%}
+{%- elsif _bc == nil and page.layout == "stack" -%}
+  {%- capture _bc_json -%}[
+    {"@type":"ListItem","position":1,"name":"Stacks","item":{{ "/stacks/" | absolute_url | jsonify }}},
+    {"@type":"ListItem","position":2,"name":{{ page.title | jsonify }},"item":{{ _page_url | jsonify }}}
+  ]{%- endcapture -%}
+{%- elsif _bc -%}
+  {%- capture _bc_json -%}[
+    {%- for crumb in _bc -%}
+      {"@type":"ListItem","position":{{ forloop.index }},"name":{{ crumb.name | jsonify }},"item":{{ crumb.url | absolute_url | jsonify }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]{%- endcapture -%}
+{%- endif -%}
+{%- if _bc_json -%}
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": {{ _bc_json | strip_newlines }} }
+</script>
+{%- endif -%}
+
+{%- comment -%} FAQPage if page declares faqs. {%- endcomment -%}
+{%- if page.faqs and page.faqs.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- for f in page.faqs -%}
+    {
+      "@type": "Question",
+      "name": {{ f.q | jsonify }},
+      "acceptedAnswer": { "@type": "Answer", "text": {{ f.a | jsonify }} }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}

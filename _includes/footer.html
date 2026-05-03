@@ -20,7 +20,10 @@
     </div>
     <div class="mt-12 flex flex-col gap-3 border-t border-axal-gray-100 pt-6 text-xs text-axal-gray md:flex-row md:items-center md:justify-between">
       <span>© {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</span>
-      <span class="font-mono">build · {{ site.time | date: "%Y.%m.%d" }}</span>
+      <span class="flex items-center gap-3">
+        <button type="button" class="underline-offset-2 hover:underline focus-visible:underline" data-axal-consent-open>Cookie preferences</button>
+        <span class="font-mono">build · {{ site.time | date: "%Y.%m.%d" }}</span>
+      </span>
     </div>
   </div>
 </footer>

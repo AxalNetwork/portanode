@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}" dir="{% if page.dir %}{{ page.dir }}{% elsif page.lang == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   {% include head.html %}
 </head>

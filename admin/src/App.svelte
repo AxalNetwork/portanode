@@ -12,6 +12,7 @@
   import Tasks from './views/Tasks.svelte';
   import Pricing from './views/Pricing.svelte';
   import Exports from './views/Exports.svelte';
+  import Compliance from './views/Compliance.svelte';
 
   let booted = false;
   let signedIn = false;
@@ -77,6 +78,8 @@
                   on:click={() => navigate('/pricing')}>Pricing review</button>
           <button aria-current={section === 'exports' ? 'page' : null}
                   on:click={() => navigate('/exports')}>Exports</button>
+          <button aria-current={section === 'compliance' ? 'page' : null}
+                  on:click={() => navigate('/compliance')}>Compliance</button>
           <div class="adm-divider"></div>
           <button on:click={onSignOut}>Sign out</button>
         </nav>
@@ -101,6 +104,8 @@
           <Pricing on:flash={(e) => flash(e.detail)} />
         {:else if section === 'exports'}
           <Exports on:flash={(e) => flash(e.detail)} />
+        {:else if section === 'compliance'}
+          <Compliance on:flash={(e) => flash(e.detail)} />
         {:else}
           <Dashboard on:flash={(e) => flash(e.detail)} />
         {/if}

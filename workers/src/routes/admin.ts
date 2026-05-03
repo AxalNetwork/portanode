@@ -19,6 +19,7 @@ import { ensureCustomer, createBalanceInvoice } from '../stripe/invoices';
 import { StripeApiError } from '../stripe/client';
 import { convertCentsByRate } from '../lib/fx';
 import { registerAdminPublic, registerAdminProtected } from './admin-extra';
+import { registerAdminCompliance } from './admin-compliance';
 
 export const admin = new Hono<AppContext>();
 
@@ -313,3 +314,4 @@ admin.get('/leads', async (c) => {
 // CRM extras (customers, notes, tasks, pricing review, exports, cron triggers).
 // Registered after `admin.use('*', requireAdmin)` so they all sit behind auth.
 registerAdminProtected(admin);
+registerAdminCompliance(admin);

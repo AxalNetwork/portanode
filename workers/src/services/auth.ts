@@ -7,6 +7,7 @@ import { signSession } from '../lib/jwt';
 import { logEvent } from '../db/events';
 import { sendEmail } from '../email/send';
 import { safeRedirectPath } from '../lib/safe-redirect';
+import { screenAndRecordCustomer } from '../lib/sanctions';
 
 export const MagicLinkRequest = z.object({
   email: z.string().email(),
@@ -44,6 +45,17 @@ export async function requestMagicLink(
       requestId: reqMeta.requestId,
       ip: reqMeta.ip,
       payload: { email },
+    });
+    // Sanctions screening at the only customer-creation site for this
+    // path. Helper absorbs provider failures (logs but never throws) so
+    // sign-in is not coupled to OpenSanctions availability.
+    await screenAndRecordCustomer(env, {
+      customerId,
+      name: email,
+      email,
+      country: null,
+      requestId: reqMeta.requestId,
+      ip: reqMeta.ip,
     });
   }
 

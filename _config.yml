@@ -19,6 +19,19 @@ api_base_url: ""
 # always-passes test key, safe to keep in the repo for dev.
 turnstile_site_key: "1x00000000000000000000AA"
 
+# Analytics keys (consent-gated; both empty means analytics is a no-op).
+# `cfwa_token` → Cloudflare Web Analytics beacon. `plausible_domain` → site
+# id registered with Plausible (or Umami running in plausible-compat mode).
+cfwa_token: ""
+plausible_domain: ""
+
+# Default content language (BCP-47). Per-page `lang:` overrides this. The
+# i18n layer (currently stub-only) reads `site.lang` to set <html lang>.
+lang: "en"
+i18n:
+  locales: ["en", "fr", "de", "es", "ar"]
+  default: "en"
+
 brand:
   primary: "#6B21A8"
   primary_light: "#A855F7"

@@ -14,6 +14,7 @@
     exporting = true;
     error = '';
     try {
+      try { window.axalTrack && window.axalTrack('pdf_downloaded', { kind: 'data_export' }); } catch (e) {}
       await downloadExport();
       dispatch('flash', 'Export downloaded');
     } catch (e) { error = e.message; }

@@ -63,7 +63,9 @@
     }
     submitting = true;
     try {
+      try { window.axalTrack && window.axalTrack('magic_link_requested'); } catch (e) {}
       await requestMagicLink(email, '/account/', turnstileToken);
+      try { window.axalTrack && window.axalTrack('account_created'); } catch (e) {}
       sent = true;
     } catch (e) {
       error = e.message || 'Could not send magic link.';

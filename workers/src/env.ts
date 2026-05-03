@@ -19,6 +19,11 @@ export interface Env {
   SESSION_TTL_DAYS: string;
   MAGIC_LINK_TTL_MIN: string;
 
+  // Compliance vars (non-secret tunables)
+  KYB_THRESHOLD_USD?: string;        // default 250000
+  SANCTIONS_THRESHOLD?: string;      // default 0.85
+  SANCTIONS_TIMEOUT_MS?: string;     // default 4000
+
   // Secrets
   JWT_SECRET: string;
   RESEND_API_KEY: string;
@@ -26,6 +31,7 @@ export interface Env {
   ADMIN_API_TOKEN: string;
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+  OPENSANCTIONS_API_KEY?: string;
 
   // Optional: Cloudflare Browser Rendering binding for server-side PDF
   // generation. When unbound, /api/quotes/:id/pdf returns printable HTML.
@@ -42,6 +48,9 @@ export type AppVariables = {
   ip: string;
   customer?: { id: string; email: string; jti: string };
   admin?: { tokenHashPrefix: string };
+  // Optional handoff for routes that resolve a quote inside the
+  // country-gate middleware so the main handler can reuse it.
+  preloadedQuote?: unknown;
 };
 
 export type AppContext = {

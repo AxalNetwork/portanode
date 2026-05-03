@@ -73,6 +73,19 @@
     working = false;
   }
 
+  async function setKyb(status) {
+    if (!confirm(`Mark KYB ${status} for this order?`)) return;
+    working = true;
+    try {
+      const ref = prompt('Provider reference (Sumsub/Onfido/Persona ID, optional):') || null;
+      const { patchOrderKyb } = await import('../lib/api.js');
+      await patchOrderKyb(id, { status, providerRef: ref });
+      dispatch('flash', `KYB ${status}`);
+      await load();
+    } catch (e) { dispatch('flash', 'Failed: ' + e.message); }
+    working = false;
+  }
+
   async function refund() {
     if (!confirm('Issue refund?')) return;
     working = true;
@@ -104,6 +117,29 @@
     · created {fmtDate(order.createdAt)}
     · <a class="adm-link" on:click={() => navigate('/customers/' + order.customerId)}>customer</a>
   </div>
+
+  {#if order.kybStatus && order.kybStatus !== 'not_required'}
+    <div class="adm-card" style="margin-bottom:12px;border-left:4px solid var(--axal-purple);">
+      <h2 class="adm-h2">KYB · {order.kybStatus}</h2>
+      <p class="adm-muted">
+        This order is held for KYB review (threshold met).
+        {#if order.kybProviderRef}<br>Provider ref: <code>{order.kybProviderRef}</code>{/if}
+        {#if order.kybReviewedAt}<br>Reviewed: {fmtDate(order.kybReviewedAt)} by {order.kybReviewedBy || '—'}{/if}
+      </p>
+      <p style="font-size:12px;">
+        Run KYB via
+        <a href="https://cockpit.sumsub.com/" target="_blank" rel="noopener">Sumsub</a> ·
+        <a href="https://dashboard.onfido.com/" target="_blank" rel="noopener">Onfido</a> ·
+        <a href="https://withpersona.com/dashboard" target="_blank" rel="noopener">Persona</a>
+        and record the result here.
+      </p>
+      <div class="adm-row" style="margin-top:8px;">
+        <button class="adm-btn adm-btn-primary" disabled={working} on:click={() => setKyb('cleared')}>Clear KYB</button>
+        <button class="adm-btn" disabled={working} on:click={() => setKyb('rejected')}>Reject</button>
+        <button class="adm-btn" disabled={working} on:click={() => setKyb('pending')}>Re-open</button>
+      </div>
+    </div>
+  {/if}
 
   <div class="adm-grid-2">
     <div class="adm-card">

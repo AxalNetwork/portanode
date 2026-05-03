@@ -142,6 +142,7 @@ description: Review and accept your AXAL quote. Pay the 20% reservation deposit 
         setText('#q-expedite', fmt(display(q.expediteFeeCents, fx, cur), cur));
       }
       $('#q-pdf').href = api + '/api/quotes/' + encodeURIComponent(q.id) + '/pdf' + qs;
+      try { window.axalTrack && window.axalTrack('quote_viewed', { id: q.id, currency: cur, country: q.contact && q.contact.country }); } catch (e) {}
       if (cancelled) $('#q-cancelled').classList.remove('hidden');
       if (q.status === 'accepted') {
         $('#q-accept').disabled = true;
@@ -155,6 +156,7 @@ description: Review and accept your AXAL quote. Pay the 20% reservation deposit 
     btn.disabled = true;
     setText('#q-accept', 'Redirecting to checkout…');
     $('#q-accept-err').classList.add('hidden');
+    try { window.axalTrack && window.axalTrack('checkout_started', { id: id }); } catch (e) {}
     fetch(api + '/api/quotes/' + encodeURIComponent(id) + '/checkout' + qs, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -172,7 +174,14 @@ description: Review and accept your AXAL quote. Pay the 20% reservation deposit 
         btn.disabled = false;
         setText('#q-accept', 'Accept and pay deposit');
         $('#q-accept-err').classList.remove('hidden');
-        setText('#q-accept-err', err.message);
+        // Surface the polite block as a contact-compliance prompt rather
+        // than a stack trace; this is the export-control export-controls flow.
+        var msg = err.message || 'Checkout failed';
+        if (/restricted|export control/i.test(msg)) {
+          msg = "AXAL can't ship to this destination under current export controls. Email compliance@axal.dev and we'll review your case.";
+          try { window.axalTrack && window.axalTrack('checkout_blocked', { reason: 'restricted_country' }); } catch (e) {}
+        }
+        setText('#q-accept-err', msg);
       });
   });
 })();

@@ -17,6 +17,7 @@ import {
 import { sendEmail } from '../email/send';
 import { verifyQuoteToken } from '../lib/quote-token';
 import { createCheckoutSession } from '../stripe/checkout';
+import { countryGate } from '../middleware/country-gate';
 import { getOrRenderQuotePdf } from '../services/quote-pdf';
 import { logEvent } from '../db/events';
 
@@ -95,9 +96,18 @@ quotes.get('/:id/pdf', async (c) => {
   });
 });
 
-quotes.post('/:id/checkout', async (c) => {
+quotes.post('/:id/checkout', countryGate(async (c) => {
+  // Resolve the quote inside the gate so the polite-block fires before
+  // we ever talk to Stripe. Authorization is deliberately deferred: the
+  // gate must run identically for an authorized customer and an
+  // anonymous token-bearer to avoid leaking which case applies.
+  const quote = await getQuoteById(c.env, c.req.param('id'));
+  c.set('preloadedQuote', quote ?? null);
+  return quote?.contact.country ?? null;
+}), async (c) => {
   const id = c.req.param('id');
-  const quote = await getQuoteById(c.env, id);
+  const quote = (c.get('preloadedQuote') as Awaited<ReturnType<typeof getQuoteById>> | null)
+    ?? (await getQuoteById(c.env, id));
   if (!quote) throw Errors.notFound('Quote not found');
   await authorizeQuoteRead(c, quote);
   if (quote.status === 'expired' || quote.expiresAt < Date.now()) {

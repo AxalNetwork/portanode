@@ -43,7 +43,7 @@ permalink: /specs/
     <aside class="card">
       <h2 class="text-xl font-semibold">Get the spec book</h2>
       <p class="mt-2 text-sm text-axal-gray-700">Drop your email — we'll send the current revision (PDF, ~12 MB) within a minute.</p>
-      <form action="/api/spec-download" method="post" class="mt-5 grid gap-3" data-axal-spec-form>
+      <form action="/api/spec-download" method="post" class="mt-5 grid gap-3" data-axal-spec-form onsubmit="try{window.axalTrack && window.axalTrack('lead_captured',{source:'spec_book'});window.axalTrack && window.axalTrack('pdf_downloaded',{kind:'spec_book'});}catch(e){}">
         <label class="grid gap-1 text-sm">
           <span class="font-mono text-xs uppercase tracking-wider text-axal-gray">Work email</span>
           <input type="email" name="email" required placeholder="you@company.com" class="rounded-md border border-axal-gray-200 bg-white px-3 py-2 text-sm focus:border-axal-purple focus:outline-none focus:ring-2 focus:ring-axal-purple-lighter/40" />

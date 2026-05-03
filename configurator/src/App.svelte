@@ -29,6 +29,7 @@
   }
 
   onMount(async () => {
+    try { window.axalTrack && window.axalTrack('configurator_started'); } catch (e) {}
     try {
       catalog = await loadCatalog();
       catalogStore.set(catalog);
@@ -79,6 +80,7 @@
 
   function openOptionsFor(id) {
     activeModuleId = id;
+    try { window.axalTrack && window.axalTrack('configurator_module_added', { id: id }); } catch (e) {}
   }
 
   async function onSave() {
@@ -100,6 +102,7 @@
     const id = savedId || generateId('q_');
     // Stub: hits a worker route that ships in phase 8
     flash('Generating spec sheet…');
+    try { window.axalTrack && window.axalTrack('spec_downloaded', { id: id }); } catch (e) {}
     fetch(`/api/quotes/${id}/pdf`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify($config) })
       .then((r) => r.ok ? r.blob() : Promise.reject(r.status))
       .then((blob) => {

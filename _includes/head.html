@@ -23,6 +23,7 @@
 
 {% seo title=false %}
 {% feed_meta %}
+{% include json-ld.html %}
 
 {%- comment -%} Critical inline CSS {%- endcomment -%}
 <style>
@@ -32,6 +33,15 @@
   a{color:var(--axal-purple);text-decoration:none}
   .axal-skip{position:absolute;left:-9999px;top:auto}
   .axal-skip:focus{left:1rem;top:1rem;background:#0B0B0F;color:#FAFAF7;padding:.5rem 1rem;border-radius:.5rem;z-index:100}
+  /* WCAG 2.1 AA — visible keyboard focus on every interactive element. */
+  :focus-visible{outline:2px solid var(--axal-purple);outline-offset:2px;border-radius:.25rem}
+  /* Hide focus rings only when the user is clicking, not tabbing. */
+  :focus:not(:focus-visible){outline:none}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important}
+  }
+  /* Screen-reader-only utility for unstyled visually-hidden labels. */
+  .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 
 <link rel="preload" as="font" type="font/woff2" href="{{ '/assets/fonts/Geist-Variable.woff2' | relative_url }}" crossorigin />

@@ -7,6 +7,8 @@ import { newOrderId, newCustomerId } from '../lib/ids';
 import { getQuoteById, markQuoteAccepted } from '../services/quotes';
 import { sendEmail } from '../email/send';
 import { presentmentToUsdCents } from '../lib/fx';
+import { shouldHoldForKyb, kybThresholdCents } from '../lib/kyb';
+import { screenAndRecordCustomer } from '../lib/sanctions';
 
 interface QuoteDepositSnapshot {
   currency: string;
@@ -185,13 +187,27 @@ async function onCheckoutCompleted(
   // Upsert a customer record so the order satisfies the NOT NULL FK.
   const email = session.customer_details?.email ?? quote.contact.email;
   const name = session.customer_details?.name ?? quote.contact.name ?? null;
-  const customerId = await upsertCustomer(env, {
+  const upsert = await upsertCustomer(env, {
     email,
     name,
     company: quote.contact.company,
     phone: session.customer_details?.phone ?? quote.contact.phone,
     region: quote.region,
   });
+  const customerId = upsert.id;
+  // Sanctions screening at the second customer-creation site. Skipped for
+  // existing customers (they were screened at first creation); new ones
+  // get a synchronous screen + persisted row before order INSERT so the
+  // KYB hold and the screening review can be triaged together by ops.
+  if (upsert.created) {
+    await screenAndRecordCustomer(env, {
+      customerId,
+      name: name ?? email,
+      email,
+      country: quote.contact.country ?? null,
+      requestId,
+    });
+  }
 
   // Create the order if one doesn't already exist for this checkout id.
   const existing = await env.DB.prepare(`SELECT id FROM orders WHERE stripe_checkout_id = ?`)
@@ -207,8 +223,8 @@ async function onCheckoutCompleted(
           subtotal_cents, freight_cents, tax_cents, total_cents, deposit_cents,
           deposit_paid_cents, balance_paid_cents, refunded_cents,
           stripe_customer_id, stripe_checkout_id, stripe_payment_intent_id,
-          shipping_address_json, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, 'awaiting_deposit', ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?, ?)`,
+          shipping_address_json, kyb_status, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, 'awaiting_deposit', ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?, ?, ?)`,
     )
       .bind(
         orderId,
@@ -231,10 +247,24 @@ async function onCheckoutCompleted(
         session.id,
         session.payment_intent ?? null,
         session.shipping_details ? JSON.stringify(session.shipping_details) : null,
+        // KYB hold for orders ≥ threshold (default $250k). When `pending`,
+        // ops must clear via the admin order view (Sumsub/Onfido/Persona)
+        // before the production line picks up the order.
+        shouldHoldForKyb(env, quote.totalCents) ? 'pending' : 'not_required',
         now,
         now,
       )
       .run();
+    if (shouldHoldForKyb(env, quote.totalCents)) {
+      await logEvent(env.DB, {
+        type: 'compliance.kyb_pending',
+        actorKind: 'system',
+        subjectKind: 'order',
+        subjectId: orderId,
+        requestId,
+        payload: { totalCents: quote.totalCents, thresholdCents: kybThresholdCents(env) },
+      });
+    }
   } else {
     await env.DB.prepare(
       `UPDATE orders
@@ -298,11 +328,11 @@ async function onCheckoutCompleted(
 async function upsertCustomer(
   env: AppContext['Bindings'],
   args: { email: string; name: string | null; company: string | null; phone: string | null; region: string },
-): Promise<string> {
+): Promise<{ id: string; created: boolean }> {
   const existing = await env.DB.prepare(`SELECT id FROM customers WHERE email = ?`)
     .bind(args.email)
     .first<{ id: string }>();
-  if (existing) return existing.id;
+  if (existing) return { id: existing.id, created: false };
   const id = newCustomerId();
   const now = Date.now();
   await env.DB.prepare(
@@ -311,7 +341,7 @@ async function upsertCustomer(
   )
     .bind(id, args.email, args.name, args.company, args.phone, args.region, now, now)
     .run();
-  return id;
+  return { id, created: true };
 }
 
 interface PaymentIntentObj {

@@ -59,6 +59,17 @@ export const fetchOrders = (status) =>
   api('/admin/orders' + (status ? `?status=${encodeURIComponent(status)}` : ''));
 export const fetchOrder = (id) => api(`/admin/orders/${id}`);
 export const patchOrder = (id, body) => api(`/admin/orders/${id}`, { method: 'PATCH', body });
+export const patchOrderKyb = (id, body) => api(`/admin/orders/${id}/kyb`, { method: 'PATCH', body });
+
+export const fetchKybPending = () => api('/admin/compliance/kyb/pending');
+export const fetchSanctionsScreenings = (status) =>
+  api('/admin/compliance/sanctions' + (status ? `?status=${encodeURIComponent(status)}` : ''));
+export const patchSanctionsScreening = (id, body) =>
+  api(`/admin/compliance/sanctions/${id}`, { method: 'PATCH', body });
+export const fetchRestrictedCountries = () => api('/admin/compliance/countries');
+export const putRestrictedCountries = (body) =>
+  api('/admin/compliance/countries', { method: 'PUT', body });
+export const fetchRestrictedBlocks = () => api('/admin/compliance/blocks');
 export const refundEligibility = (id) => api(`/admin/orders/${id}/refund-eligibility`);
 export const issueBalance = (id, body) =>
   api(`/admin/orders/${id}/invoice-balance`, { method: 'POST', body: body || {} });

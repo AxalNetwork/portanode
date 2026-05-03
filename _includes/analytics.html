@@ -1,18 +1,76 @@
 {%- comment -%}
-  Analytics is consent-gated. Replace SITE_ID with your provider key when ready.
-  Keeping a stub here ensures the include exists for layouts that reference it.
+  Two-channel analytics, both consent-gated:
+
+    1. Cloudflare Web Analytics (privacy-respecting page-views + Core Web
+       Vitals; no cookies, no PII). Loaded only when the visitor consents
+       to "analytics" so we stay aligned with the cookie-banner's category
+       semantics even though CFWA itself is cookie-less.
+    2. Plausible (or self-hosted Umami) for funnel events — page-views plus
+       named events emitted from the configurator, checkout, and account
+       flows via `window.axalTrack(name, props)`.
+
+  Wire keys via `_config.yml`:
+    cfwa_token: "abc123"             # Cloudflare beacon token
+    plausible_domain: "axal.dev"     # Plausible site id
+
+  Funnel event names (emit from app code as needed):
+    module_viewed, configurator_started, configurator_module_added,
+    configurator_option_changed, quote_requested, quote_viewed,
+    checkout_started, checkout_completed, pdf_downloaded, spec_downloaded,
+    lead_captured, account_created.
 {%- endcomment -%}
-{% if site.analytics_id %}
 <script>
-  (function(){
-    try{
-      if(localStorage.getItem("axal.cookie.consent") !== "accept") return;
+(function(){
+  // No-op tracker until consent flips it real.
+  window.axalTrack = window.axalTrack || function(){ /* queued no-op */ };
+  var queue = [];
+  function track(name, props){
+    if(typeof window.plausible === "function"){
+      try{ window.plausible(name, props ? {props: props} : undefined); }catch(e){}
+    } else {
+      queue.push([name, props]);
+    }
+  }
+  function load(){
+    var c = window.AxalConsent;
+    if(!c || !c.analytics) return;
+    {% if site.cfwa_token %}
+    if(!document.querySelector('script[data-cf-beacon]')){
+      var b=document.createElement("script");
+      b.defer=true;
+      b.src="https://static.cloudflareinsights.com/beacon.min.js";
+      b.setAttribute("data-cf-beacon", JSON.stringify({token: {{ site.cfwa_token | jsonify }}}));
+      document.head.appendChild(b);
+    }
+    {% endif %}
+    {% if site.plausible_domain %}
+    if(!document.querySelector('script[data-plausible]')){
       var s=document.createElement("script");
       s.defer=true;
-      s.src="https://plausible.io/js/script.js";
-      s.setAttribute("data-domain","{{ site.analytics_id }}");
+      s.setAttribute("data-plausible","1");
+      s.setAttribute("data-domain", {{ site.plausible_domain | jsonify }});
+      s.src="https://plausible.io/js/script.manual.tagged-events.js";
+      s.onload = function(){
+        window.plausible = window.plausible || function(){ (window.plausible.q = window.plausible.q || []).push(arguments); };
+        try{ window.plausible('pageview'); }catch(e){}
+        // Drain any events queued while the script was loading.
+        for(var i=0;i<queue.length;i++){ try{ window.plausible(queue[i][0], queue[i][1] ? {props: queue[i][1]} : undefined); }catch(e){} }
+        queue.length = 0;
+      };
       document.head.appendChild(s);
-    }catch(e){}
-  })();
+    }
+    {% endif %}
+    window.axalTrack = track;
+  }
+  // Track pageview on subsequent SPA-style navigations within the
+  // configurator / account / admin SPAs (they push hash routes).
+  window.addEventListener("hashchange", function(){
+    if(typeof window.plausible === "function"){
+      try{ window.plausible('pageview'); }catch(e){}
+    }
+  });
+  if(document.readyState === "complete") load();
+  else window.addEventListener("load", load);
+  window.addEventListener("axal:consent", load);
+})();
 </script>
-{% endif %}

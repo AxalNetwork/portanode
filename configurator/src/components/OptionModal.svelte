@@ -81,7 +81,7 @@
                 <input
                   type="checkbox"
                   checked={isOn}
-                  on:change={(e) => toggleOption(catalog, moduleId, opt.id, e.target.checked)}
+                  on:change={(e) => { toggleOption(catalog, moduleId, opt.id, e.target.checked); try { window.axalTrack && window.axalTrack('configurator_option_changed', { moduleId, optionId: opt.id, on: e.target.checked }); } catch (err) {} }}
                 />
                 <span style="flex:1;">
                   <span class="name">{opt.name}</span>

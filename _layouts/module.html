@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+<script>try{window.axalTrack && window.axalTrack('module_viewed', { id: {{ page.slug | jsonify }}, sku: {{ page.sku | default: page.slug | jsonify }} });}catch(e){}</script>
 {%- assign _catMod = site.data.catalog.modules | where: "id", page.slug | first -%}
 <article class="container-page py-14">
   <nav class="mb-6 text-xs font-mono uppercase tracking-wider text-axal-gray" aria-label="Breadcrumb">
