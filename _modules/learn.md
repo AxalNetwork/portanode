@@ -1,16 +1,9 @@
 ---
 slug: learn
 title: Learn
-sku: AX-LRN-01
-category: Education
 order: 8
 tagline: Classroom and training pod with a stocked digital library.
 summary: Learn is a 24-seat classroom plus a self-contained digital library. It runs offline-first — every video, textbook, and course caches locally and syncs whenever Core has an uplink.
-price: "68,000"
-price_unit: USD
-lead_time: "5 wks"
-footprint: "20 ft"
-weight: "5.9 t"
 specs:
   - label: Capacity
     value: "24 students + instructor"

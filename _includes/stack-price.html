@@ -1,0 +1,25 @@
+{%- comment -%}
+  Compute and render a stack's starting price from _data/stacks.json + _data/catalog.json.
+  Input: include.slug (stack id).
+{%- endcomment -%}
+{%- assign _sid = include.slug -%}
+{%- assign _stack = site.data.stacks.stacks | where: "id", _sid | first -%}
+{%- if _stack -%}
+  {%- assign _total = 0 -%}
+  {%- for entry in _stack.modules -%}
+    {%- assign _mod = site.data.catalog.modules | where: "id", entry.moduleId | first -%}
+    {%- if _mod -%}
+      {%- assign _line = _mod.basePrice -%}
+      {%- for oid in entry.options -%}
+        {%- assign _opt = _mod.options | where: "id", oid | first -%}
+        {%- if _opt -%}
+          {%- assign _line = _line | plus: _opt.priceDelta -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign _line = _line | times: entry.qty -%}
+      {%- assign _total = _total | plus: _line -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- capture _formatted -%}{% include _format-usd.html amount=_total %}{%- endcapture -%}
+  {%- include price-display.html amount=_formatted unit="USD" -%}
+{%- endif -%}

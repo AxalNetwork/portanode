@@ -1,16 +1,9 @@
 ---
 slug: grow
 title: Grow
-sku: AX-GROW-01
-category: Food
 order: 4
 tagline: Hydroponic vertical farm in a 40-ft high-cube.
 summary: Grow is a climate-isolated vertical farm. Eight tiers of NFT trays, full-spectrum LED lighting, and a closed-loop nutrient skid produce roughly 1.4 t of leafy greens per year per module.
-price: "118,000"
-price_unit: USD
-lead_time: "7 wks"
-footprint: "40 ft HC"
-weight: "11.4 t"
 specs:
   - label: Yield (leafy)
     value: "~1.4 t / yr"

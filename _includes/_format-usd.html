@@ -1,0 +1,20 @@
+{%- comment -%}
+  Format an integer USD amount with thousands separators and capture into
+  include.var (default `_formattedUsd`). The captured string is the raw
+  number with commas (no currency symbol). Caller renders presentation.
+  Inputs: include.amount (required, integer), include.var (optional)
+{%- endcomment -%}
+{%- assign _intStr = include.amount | round | append: "" -%}
+{%- assign _len = _intStr | size -%}
+{%- assign _out = "" -%}
+{%- for i in (1.._len) -%}
+  {%- assign _idxFromEnd = _len | minus: i -%}
+  {%- assign _ch = _intStr | slice: _idxFromEnd, 1 -%}
+  {%- assign _pos = i | minus: 1 -%}
+  {%- assign _mod3 = _pos | modulo: 3 -%}
+  {%- if _mod3 == 0 and _pos != 0 -%}
+    {%- assign _out = "," | append: _out -%}
+  {%- endif -%}
+  {%- assign _out = _ch | append: _out -%}
+{%- endfor -%}
+{{ _out }}

@@ -1,16 +1,9 @@
 ---
 slug: core
 title: AXAL Core
-sku: AX-CORE-01
-category: Foundation
 order: 1
 tagline: Command, comms, and orchestration for the whole stack.
 summary: Every AXAL deployment starts with Core — the brains that orchestrate power, manage data flows, and connect your stack to the outside world over satellite, LTE, or fibre.
-price: "84,000"
-price_unit: USD
-lead_time: "4 wks"
-footprint: "10 ft"
-weight: "2.4 t"
 specs:
   - label: Compute
     value: "AMD EPYC 16-core + 64 GB ECC"

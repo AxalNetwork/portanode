@@ -1,16 +1,9 @@
 ---
 slug: volt
 title: Volt
-sku: AX-VOLT-01
-category: Power
 order: 2
 tagline: Solar + battery power module with a 60 kWh DC bus.
 summary: Volt is a self-contained power plant — bifacial PV on the deployable canopy, lithium-iron-phosphate cells inside, and a smart inverter that integrates with grid, generator, or fuel-cell sources.
-price: "62,000"
-price_unit: USD
-lead_time: "5 wks"
-footprint: "20 ft"
-weight: "8.6 t"
 specs:
   - label: Battery
     value: "60 kWh LFP"

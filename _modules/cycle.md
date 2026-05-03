@@ -1,16 +1,9 @@
 ---
 slug: cycle
 title: Cycle
-sku: AX-CYCL-01
-category: Waste
 order: 6
 tagline: Closed-loop waste, blackwater, and organics processing.
 summary: Cycle handles everything the stack throws away. Membrane bioreactor for blackwater, anaerobic digester for organics, and a pyrolysis chamber for non-recyclable solids — all inside one container.
-price: "96,000"
-price_unit: USD
-lead_time: "6 wks"
-footprint: "20 ft"
-weight: "9.1 t"
 specs:
   - label: Blackwater
     value: "MBR, 4 m³/day"

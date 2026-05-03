@@ -1,16 +1,9 @@
 ---
 slug: care
 title: Care
-sku: AX-CARE-01
-category: Health
 order: 7
 tagline: Field clinic, exam suite, and telemedicine bridge.
 summary: Care is a deployable healthcare module — two exam rooms, a small lab corner, refrigerated pharmacy, and a teleconsult booth that connects to specialists over Core's uplink.
-price: "92,000"
-price_unit: USD
-lead_time: "7 wks"
-footprint: "20 ft"
-weight: "7.4 t"
 specs:
   - label: Exam rooms
     value: "2 (curtained or walled)"

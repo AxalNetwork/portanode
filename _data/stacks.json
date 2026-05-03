@@ -1,0 +1,140 @@
+{
+  "version": "1.0.0",
+  "stacks": [
+    {
+      "id": "research-lab",
+      "name": "Research Lab",
+      "tier": "T1",
+      "order": 1,
+      "summary": "Self-contained field-research station for biology, climate, or environmental work — lab bench, BSL-2 ready exam, full power and water autonomy.",
+      "capacity": "6 researchers, 90 days",
+      "footprint": "5 modules · 110 m²",
+      "leadTimeWeeks": 9,
+      "freight": { "tier": 1, "estimateUsd": 36000 },
+      "service": { "label": "Spares + first-year service", "estimateUsd": 24000 },
+      "commissioning": { "label": "Install support (5 days, 2 techs)", "estimateUsd": 28000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-hd","storage-32tb","net-10g","cooling-air","power-input-dc","climate-std","sec-baseline","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-60","pv-12","inverter-30"] },
+        { "moduleId": "flow",  "qty": 1, "options": ["intake-borehole","ro-dual","uv-ozone","storage-4k","lab-water"] },
+        { "moduleId": "shell", "qty": 1, "options": ["layout-lab","hvac-hepa","fume-hood"] }
+      ]
+    },
+    {
+      "id": "edge-compute",
+      "name": "Edge Compute",
+      "tier": "T2",
+      "order": 2,
+      "summary": "Container-scale compute pod for telco MEC, CDN, or ML inference — high-density GPU racks with cold-climate-rated cooling and dual uplink.",
+      "capacity": "120 kW IT load",
+      "footprint": "3 modules · 60 m²",
+      "leadTimeWeeks": 8,
+      "freight": { "tier": 1, "estimateUsd": 24000 },
+      "service": { "label": "12-month service contract", "estimateUsd": 36000 },
+      "commissioning": { "label": "Install + commissioning", "estimateUsd": 32000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-hd","storage-64tb","net-10g","cooling-liquid","power-input-ac","climate-std","sec-baseline","ai-monitor","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-120","pv-12","inverter-60","grid-tie-cert-na"] },
+        { "moduleId": "shell", "qty": 1, "options": ["layout-dc","hvac-std"] }
+      ]
+    },
+    {
+      "id": "off-grid-clinic",
+      "name": "Off-Grid Clinic",
+      "tier": "T1",
+      "order": 3,
+      "summary": "Two exam rooms, pharmacy, lab, ward, and full power and water autonomy — designed for rural primary-care contracts and disaster response.",
+      "capacity": "120 patients/day",
+      "footprint": "5 modules · 110 m²",
+      "leadTimeWeeks": 8,
+      "freight": { "tier": 1, "estimateUsd": 30000 },
+      "service": { "label": "Spares + first-year service", "estimateUsd": 16000 },
+      "commissioning": { "label": "Clinical commissioning", "estimateUsd": 26000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-base","storage-8tb","net-1g","cooling-air","power-input-dc","climate-std","sec-baseline","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-120","pv-12","inverter-30"] },
+        { "moduleId": "flow",  "qty": 1, "options": ["intake-borehole","ro-dual","uv-ozone","storage-4k","lab-water"] },
+        { "moduleId": "care",  "qty": 1, "options": ["exam-2-walled","neg-pressure","lab-poc","pharmacy-cold","telemedicine-4k","ce-class-iia"] },
+        { "moduleId": "shell", "qty": 1, "options": ["layout-ward","hvac-hepa"] }
+      ]
+    },
+    {
+      "id": "vertical-farm",
+      "name": "Vertical Farm",
+      "tier": "T2",
+      "order": 4,
+      "summary": "Six-module hydroponic farm aggregator — ~8 t / yr leafy greens, closed-loop water, and a packing room ready for retail-grade output.",
+      "capacity": "~8 t / yr leafy greens",
+      "footprint": "6 modules · 160 m²",
+      "leadTimeWeeks": 10,
+      "freight": { "tier": 2, "estimateUsd": 42000 },
+      "service": { "label": "Year-one nutrients + seed", "estimateUsd": 22000 },
+      "commissioning": { "label": "Install + agronomist", "estimateUsd": 48000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-base","storage-32tb","net-1g","cooling-air","power-input-ac","climate-std","sec-baseline","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-120","pv-18","inverter-60","grid-tie-cert-na"] },
+        { "moduleId": "flow",  "qty": 1, "options": ["intake-borehole","ro-single","uv-ozone","storage-8k","greywater-loop"] },
+        { "moduleId": "grow",  "qty": 4, "options": ["tiers-8","led-leafy","hvac-temperate","haccp-pkg","seed-library"] },
+        { "moduleId": "cycle", "qty": 1, "options": ["mbr-4","digester-500","biogas-chp","compliance-na"] }
+      ]
+    },
+    {
+      "id": "disaster-response",
+      "name": "Disaster Response",
+      "tier": "T1",
+      "order": 5,
+      "summary": "Rapid-deploy stack for floods, earthquakes, and conflict zones — drinking water, clinic, and shelter operational in under 18 hours of arrival.",
+      "capacity": "~600 people served",
+      "footprint": "5 modules · 110 m²",
+      "leadTimeWeeks": 6,
+      "freight": { "tier": 1, "estimateUsd": 48000, "label": "Air-freight surcharge (optional)" },
+      "service": { "label": "30-day field-spares kit", "estimateUsd": 20000 },
+      "commissioning": { "label": "Surge-team commissioning", "estimateUsd": 22000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-base","storage-8tb","net-1g","cooling-air","power-input-dc","climate-std","sec-baseline","uplink-iridium"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-120","pv-12","inverter-30","diesel-inlet"] },
+        { "moduleId": "flow",  "qty": 1, "options": ["intake-surface","ro-dual","uv-ozone","storage-4k"] },
+        { "moduleId": "care",  "qty": 1, "options": ["exam-2-walled","neg-pressure","lab-poc","pharmacy-cold","telemedicine-4k"] },
+        { "moduleId": "shell", "qty": 1, "options": ["layout-ward","hvac-hepa"] }
+      ]
+    },
+    {
+      "id": "satellite-ground-station",
+      "name": "Satellite Ground Station",
+      "tier": "T2",
+      "order": 6,
+      "summary": "Container-scale teleport for LEO and MEO operators — RF shelter, edge compute, and full autonomy for sites well off the grid.",
+      "capacity": "8x antenna RF chains",
+      "footprint": "3 modules · 60 m²",
+      "leadTimeWeeks": 9,
+      "freight": { "tier": 2, "estimateUsd": 36000 },
+      "service": { "label": "First-year remote support", "estimateUsd": 40000 },
+      "commissioning": { "label": "RF survey + integration", "estimateUsd": 48000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-hd","storage-32tb","net-10g","cooling-liquid","power-input-ac","climate-std","sec-classified","ai-monitor","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 2, "options": ["battery-120","pv-12","inverter-60","grid-tie-cert-na"] },
+        { "moduleId": "shell", "qty": 1, "options": ["layout-rf","hvac-std"] }
+      ]
+    },
+    {
+      "id": "eco-resort",
+      "name": "Eco-Resort",
+      "tier": "T2",
+      "order": 7,
+      "summary": "Off-grid hospitality stack for boutique lodges — power, water, kitchen-garden, and zero-waste sanitation for up to 30 keys.",
+      "capacity": "30 keys",
+      "footprint": "6 modules · 160 m²",
+      "leadTimeWeeks": 10,
+      "freight": { "tier": 2, "estimateUsd": 48000 },
+      "service": { "label": "Year-one service contract", "estimateUsd": 32000 },
+      "commissioning": { "label": "Hospitality commissioning", "estimateUsd": 44000 },
+      "modules": [
+        { "moduleId": "core",  "qty": 1, "options": ["compute-base","storage-8tb","net-1g","cooling-air","power-input-ac","climate-std","sec-baseline","uplink-starlink"] },
+        { "moduleId": "volt",  "qty": 3, "options": ["battery-120","pv-18","inverter-60","grid-tie-cert-eu"] },
+        { "moduleId": "flow",  "qty": 1, "options": ["intake-borehole","ro-dual","uv-ozone","storage-8k","greywater-loop"] },
+        { "moduleId": "grow",  "qty": 1, "options": ["tiers-8","led-leafy","hvac-temperate","haccp-pkg","seed-library"] },
+        { "moduleId": "cycle", "qty": 1, "options": ["mbr-4","digester-200","biogas-chp","pyrolysis","compliance-eu"] }
+      ]
+    }
+  ]
+}

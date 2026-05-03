@@ -1,16 +1,9 @@
 ---
 slug: shell
 title: Shell
-sku: AX-SHELL-01
-category: Habitat
 order: 5
 tagline: Habitat, lab, or office shell — finished and ready to occupy.
 summary: "Shell ships as a fully finished interior — insulated walls, HVAC, lighting, plumbing rough-ins, and your choice of layout: bunk, lab, ward, classroom, or open office."
-price: "74,000"
-price_unit: USD
-lead_time: "6 wks"
-footprint: "20 ft"
-weight: "6.8 t"
 specs:
   - label: U-value (walls)
     value: "0.18 W/m²K"

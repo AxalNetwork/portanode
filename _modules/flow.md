@@ -1,16 +1,9 @@
 ---
 slug: flow
 title: Flow
-sku: AX-FLOW-01
-category: Water
 order: 3
 tagline: Water capture, treatment, and reuse at container scale.
 summary: Flow takes whatever water you have — borehole, river, atmospheric, or grey — and turns it into potable, process, and irrigation streams. Reverse osmosis, UV, and biological polishing in one container.
-price: "58,000"
-price_unit: USD
-lead_time: "5 wks"
-footprint: "20 ft"
-weight: "7.2 t"
 specs:
   - label: Throughput (potable)
     value: "8 m³/day"

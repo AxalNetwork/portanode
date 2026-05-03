@@ -11,9 +11,10 @@ permalink: /stacks/
   <p class="mt-4 max-w-2xl text-lg text-axal-gray-700">Seven proven combinations of modules tuned for the most common AXAL deployments. Configure as-is, or use any stack as a starting point in the configurator.</p>
 
   <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-    {% assign stacks = site.stacks | sort: "order" %}
-    {% for s in stacks %}
-      <li>{% include stack-card.html stack=s %}</li>
+    {% assign stacks_data = site.data.stacks.stacks | sort: "order" %}
+    {% for sd in stacks_data %}
+      {%- assign s = site.stacks | where: "slug", sd.id | first -%}
+      {% if s %}<li>{% include stack-card.html stack=s %}</li>{% endif %}
     {% endfor %}
   </ul>
 </section>

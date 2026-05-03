@@ -1,0 +1,10 @@
+{%- comment -%}
+  Resolve a module's base price from _data/catalog.json by id (page slug).
+  Inputs: include.slug (required)
+{%- endcomment -%}
+{%- assign _slug = include.slug -%}
+{%- assign _mod = site.data.catalog.modules | where: "id", _slug | first -%}
+{%- if _mod -%}
+  {%- capture _formatted -%}{% include _format-usd.html amount=_mod.basePrice %}{%- endcapture -%}
+  {%- include price-display.html amount=_formatted unit=_mod.currency -%}
+{%- endif -%}

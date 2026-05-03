@@ -1,0 +1,52 @@
+{%- comment -%}
+  Render a computed BOM table for a stack from _data/stacks.json + _data/catalog.json.
+  Input: include.slug
+{%- endcomment -%}
+{%- assign _sid = include.slug -%}
+{%- assign _stack = site.data.stacks.stacks | where: "id", _sid | first -%}
+{%- if _stack -%}
+  {%- assign _hardware = 0 -%}
+  {%- for entry in _stack.modules -%}
+    {%- assign _mod = site.data.catalog.modules | where: "id", entry.moduleId | first -%}
+    {%- if _mod -%}
+      {%- assign _line = _mod.basePrice -%}
+      {%- for oid in entry.options -%}
+        {%- assign _opt = _mod.options | where: "id", oid | first -%}
+        {%- if _opt -%}{%- assign _line = _line | plus: _opt.priceDelta -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign _line = _line | times: entry.qty -%}
+      {%- assign _hardware = _hardware | plus: _line -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign _commission = _stack.commissioning.estimateUsd | default: 0 -%}
+  {%- assign _freight = _stack.freight.estimateUsd | default: 0 -%}
+  {%- assign _service = _stack.service.estimateUsd | default: 0 -%}
+  {%- assign _total = _hardware | plus: _commission | plus: _freight | plus: _service -%}
+
+  <dl class="rounded-card border border-axal-gray-100 bg-white p-5">
+    {% for entry in _stack.modules %}
+      {%- assign _mod = site.data.catalog.modules | where: "id", entry.moduleId | first -%}
+      {%- if _mod -%}
+        {%- assign _line = _mod.basePrice -%}
+        {%- for oid in entry.options -%}
+          {%- assign _opt = _mod.options | where: "id", oid | first -%}
+          {%- if _opt -%}{%- assign _line = _line | plus: _opt.priceDelta -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign _line = _line | times: entry.qty -%}
+        {%- capture _lineFmt -%}{% include _format-usd.html amount=_line %}{%- endcapture -%}
+        <div class="spec-row">
+          <dt>{{ _mod.name }} <span class="font-mono text-xs text-axal-gray">×{{ entry.qty }}</span></dt>
+          <dd>${{ _lineFmt | strip }}</dd>
+        </div>
+      {%- endif -%}
+    {% endfor %}
+    {%- capture _hwFmt -%}{% include _format-usd.html amount=_hardware %}{%- endcapture -%}
+    <div class="spec-row"><dt>Hardware subtotal</dt><dd>${{ _hwFmt | strip }}</dd></div>
+    {% if _commission > 0 %}{%- capture _cFmt -%}{% include _format-usd.html amount=_commission %}{%- endcapture -%}<div class="spec-row"><dt>{{ _stack.commissioning.label }}</dt><dd>${{ _cFmt | strip }}</dd></div>{% endif %}
+    {% if _freight > 0 %}{%- capture _fFmt -%}{% include _format-usd.html amount=_freight %}{%- endcapture -%}<div class="spec-row"><dt>Sea freight (tier {{ _stack.freight.tier }}){% if _stack.freight.label %} — {{ _stack.freight.label }}{% endif %}</dt><dd>${{ _fFmt | strip }}</dd></div>{% endif %}
+    {% if _service > 0 %}{%- capture _sFmt -%}{% include _format-usd.html amount=_service %}{%- endcapture -%}<div class="spec-row"><dt>{{ _stack.service.label }}</dt><dd>${{ _sFmt | strip }}</dd></div>{% endif %}
+    {%- capture _totalFmt -%}{% include _format-usd.html amount=_total %}{%- endcapture -%}
+    <div class="spec-row"><dt><strong>Total turnkey</strong></dt><dd><strong>${{ _totalFmt | strip }}</strong></dd></div>
+  </dl>
+{%- endif -%}

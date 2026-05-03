@@ -20,6 +20,21 @@ purchase. This repo currently contains the brand foundation and theme shell.
 - `jekyll-feed`, `jekyll-seo-tag`, `jekyll-sitemap`, `jekyll-redirect-from`,
   `jekyll-include-cache`
 
+## Catalog data
+Canonical product data lives in `_data/`:
+- `catalog.json` — 8 modules with `basePrice`, `dimensions`, `weight`, `power`,
+  `leadTimeWeeks`, `regions[]`, `interconnects[]`, and grouped `options[]`
+  (each with `priceDelta`, `requires[]`, `excludes[]`)
+- `stacks.json` — 7 launch stacks pointing at module ids + default options
+- `promotions.json` — placeholder array for regional / launch promos
+- `catalog.schema.json` — JSON Schema validating `catalog.json`
+
+Validate locally: `npm run validate:catalog` (also runs as `prebuild:css`
+hook). Module/stack pages and listing cards read prices and option summaries
+from these files via `_includes/catalog-price.html`,
+`_includes/stack-price.html`, and `_includes/module-options.html`. No prices
+are hard-coded in module/stack markdown frontmatter.
+
 ## Collections
 - `_modules/` → `/modules/:slug/` — 8 modules (Core, Volt, Flow, Grow, Shell, Cycle, Care, Learn)
 - `_stacks/` → `/stacks/:slug/` — 7 reference stacks
