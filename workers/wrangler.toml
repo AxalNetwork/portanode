@@ -79,3 +79,9 @@ bucket_name = "axal-assets-staging"
 
 [observability]
 enabled = true
+
+# Cron triggers — daily ops digest (08:00 UTC) and weekly always-recent CSV
+# snapshot (Mon 06:00 UTC). The Worker dispatches by `event.cron` string in
+# `src/index.ts`'s `scheduled` handler.
+[triggers]
+crons = ["0 8 * * *", "0 6 * * 1"]

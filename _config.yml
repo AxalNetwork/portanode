@@ -86,6 +86,8 @@ exclude:
   - vendor
   - configurator
   - account
+  - admin
+  - workers
   - Gemfile
   - Gemfile.lock
   - README.md

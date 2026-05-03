@@ -10,7 +10,7 @@ export const OrderNoteInput = z.object({
 
 export const OrderPatch = z.object({
   status: z
-    .enum(['awaiting_deposit', 'in_production', 'shipping', 'delivered', 'cancelled', 'refunded'])
+    .enum(['awaiting_deposit', 'reserved', 'in_production', 'shipping', 'delivered', 'cancelled', 'refunded'])
     .optional(),
   expectedShipAt: z.number().int().positive().nullable().optional(),
   shippedAt: z.number().int().positive().nullable().optional(),

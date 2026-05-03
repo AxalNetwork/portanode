@@ -18,8 +18,15 @@ import { computeRefundEligibility, executeStripeRefund } from '../stripe/refunds
 import { ensureCustomer, createBalanceInvoice } from '../stripe/invoices';
 import { StripeApiError } from '../stripe/client';
 import { convertCentsByRate } from '../lib/fx';
+import { registerAdminPublic, registerAdminProtected } from './admin-extra';
 
 export const admin = new Hono<AppContext>();
+
+// Public endpoints (login / logout) must register BEFORE the requireAdmin
+// middleware so they remain reachable without a cookie. They still validate
+// the bearer token internally before issuing or revoking sessions.
+registerAdminPublic(admin);
+
 admin.use('*', requireAdmin);
 
 admin.get('/dashboard', async (c) => {
@@ -302,3 +309,7 @@ admin.get('/leads', async (c) => {
   const data = await listLeadsAdmin(c.env, kind, status, limit);
   return c.json({ data });
 });
+
+// CRM extras (customers, notes, tasks, pricing review, exports, cron triggers).
+// Registered after `admin.use('*', requireAdmin)` so they all sit behind auth.
+registerAdminProtected(admin);

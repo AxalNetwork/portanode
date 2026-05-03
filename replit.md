@@ -94,6 +94,49 @@ npm run migrate:local && npm run dev`.
   Stripe linkage columns and creates `stripe_events` (event ledger) +
   `refunds` (admin refund ledger).
 
+## Admin console
+Internal ops console at `/admin/` (Cloudflare basic-auth at the edge is the
+outer gate; the SPA additionally requires the `axal_admin` HttpOnly cookie
+issued by `POST /admin/login` after presenting the `ADMIN_API_TOKEN`). Source
+in `admin/`, builds to `assets/admin/bundle.{js,css}`. Hash-router views:
+- `#/dashboard` — funnel counts, weekly leads/quotes/orders, deposit
+  pipeline, leads-by-source / orders-by-status tables, manual cron triggers
+- `#/inbox` — leads from contact / leasing / spec / newsletter / demo with
+  inline status updates (PATCH `/admin/leads/:id`)
+- `#/pipeline` — 8-column Kanban (Lead → Qualified → Quote sent →
+  Awaiting deposit → In production → Shipping → Delivered → Closed). Quote
+  columns are read-only; order columns accept HTML5 drag-drop and call
+  `PATCH /admin/orders/:id`.
+- `#/customers` and `#/customers/:id` — search + 360° view: orders, quotes,
+  configurations, tasks, timestamped notes (CRM), and a 50-row event timeline.
+- `#/orders/:id` — money breakdown, status switcher, tracking edit, balance
+  invoice (`POST /admin/orders/:id/invoice-balance`), and policy-band refund
+  (`POST /admin/refunds`) with optional override and amount.
+- `#/tasks` — open / overdue / completed lists with linkable customer and
+  order references. Daily 08:00 UTC cron (`runDailyTaskDigest` in
+  `workers/src/services/admin-cron.ts`) emails an HTML+text digest of
+  overdue + due-today tasks via `email/raw.ts` to `EMAIL_REPLY_TO`.
+- `#/pricing` — quarterly snapshots of `_data/catalog.json`. The SPA fetches
+  `/assets/configurator/catalog.json` (or `/_data/catalog.json`) and POSTs
+  to `/admin/pricing/diff` to render added / removed / changed module prices
+  + per-option deltas. Snapshots persist to `pricing_snapshots` (D1).
+- `#/exports` — CSV bundle of customers, leads, quotes, orders, invoices,
+  refunds, notes, and tasks. Stored at `admin-exports/{YYYY-MM-DD}.csv` and
+  `admin-exports/latest.csv` in R2. Weekly cron `0 6 * * 1` rebuilds the
+  latest snapshot.
+
+Backend in `workers/src/routes/admin-extra.ts` (login/logout/me, customers,
+notes, leads PATCH, tasks, pricing, exports, manual cron triggers) and
+`workers/src/services/{crm,pricing-review,admin-export,admin-cron}.ts`. The
+`requireAdmin` middleware accepts either `Bearer ADMIN_API_TOKEN` (scripts)
+or the `axal_admin` cookie tracked in `admin_sessions` (12 h TTL, hashed
+with SHA-256, `last_used_at` bumped on each request). Migration
+`0009_admin_crm.sql` adds `customer_notes`, `admin_tasks`, `pricing_snapshots`,
+`admin_sessions`. Cron triggers configured in `wrangler.toml`
+`[triggers].crons = ["0 8 * * *", "0 6 * * 1"]` and dispatched by
+`event.cron` in the `scheduled` handler in `workers/src/index.ts`. Build:
+`cd admin && npm install && npm run build`.
+
 ## Catalog data
 Canonical product data lives in `_data/`:
 - `catalog.json` — 8 modules with `basePrice`, `dimensions`, `weight`, `power`,

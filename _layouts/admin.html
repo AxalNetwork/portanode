@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<section class="container-page py-10" style="max-width:1280px;">
+  {% if page.eyebrow %}<div class="text-xs font-mono uppercase tracking-wider text-axal-purple">{{ page.eyebrow }}</div>{% endif %}
+  {% if page.title %}<h1 class="sr-only">{{ page.title }}</h1>{% endif %}
+
+  <link rel="stylesheet" href="{{ '/assets/admin/bundle.css' | relative_url }}" />
+  <noscript>
+    <div class="mt-8 p-6 rounded-card border border-axal-gray-100 bg-axal-gray-50">
+      The admin console requires JavaScript.
+    </div>
+  </noscript>
+
+  <div id="axal-admin" data-admin-mount></div>
+
+  <script>
+    window.AXAL_API_BASE = {{ site.api_base_url | default: '' | jsonify }};
+  </script>
+  <script type="module" src="{{ '/assets/admin/bundle.js' | relative_url }}"></script>
+</section>

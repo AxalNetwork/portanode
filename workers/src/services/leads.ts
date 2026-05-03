@@ -27,7 +27,18 @@ export const SpecDownloadInput = z.object({
   utm: z.record(z.string(), z.string()).optional(),
 });
 
-export type LeadKind = 'contact' | 'leasing' | 'spec_download' | 'newsletter';
+export const DemoRequestInput = z.object({
+  email: z.string().email(),
+  name: z.string().max(200).optional(),
+  company: z.string().max(200).optional(),
+  phone: z.string().max(40).optional(),
+  region: z.string().max(16).optional(),
+  message: z.string().max(4000).optional(),
+  preferredDate: z.string().max(40).optional(),
+  utm: z.record(z.string(), z.string()).optional(),
+});
+
+export type LeadKind = 'contact' | 'leasing' | 'spec_download' | 'newsletter' | 'demo_request';
 
 export async function createLead(
   env: Env,

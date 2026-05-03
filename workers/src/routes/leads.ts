@@ -7,6 +7,7 @@ import {
   ContactInput,
   LeasingInput,
   SpecDownloadInput,
+  DemoRequestInput,
   createLead,
 } from '../services/leads';
 import { sendEmail } from '../email/send';
@@ -92,5 +93,37 @@ leads.post(
       { requestId: c.get('requestId'), subjectKind: 'lead', subjectId: lead.id },
     );
     return c.json({ data: { id: lead.id, downloadUrl } }, 201);
+  },
+);
+
+leads.post(
+  '/demo-request',
+  rateLimit((env) => env.RL_CONTACT),
+  turnstile,
+  async (c) => {
+    const body = await c.req.json().catch(() => null);
+    const parsed = DemoRequestInput.safeParse(body);
+    if (!parsed.success) throw Errors.invalid(parsed.error.flatten());
+    const lead = await createLead(c.env, 'demo_request', {
+      ...parsed.data,
+      message: [parsed.data.message, parsed.data.preferredDate ? `Preferred date: ${parsed.data.preferredDate}` : null]
+        .filter(Boolean)
+        .join('\n\n') || undefined,
+    }, {
+      requestId: c.get('requestId'),
+      ip: c.get('ip'),
+      userAgent: c.req.header('user-agent') ?? undefined,
+    });
+    await sendEmail(
+      c.env,
+      {
+        to: parsed.data.email,
+        template: 'contact-received',
+        subject: 'Demo request received',
+        vars: { name: parsed.data.name ?? '', leadId: lead.id },
+      },
+      { requestId: c.get('requestId'), subjectKind: 'lead', subjectId: lead.id },
+    );
+    return c.json({ data: { id: lead.id } }, 201);
   },
 );

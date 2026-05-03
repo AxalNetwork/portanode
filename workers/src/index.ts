@@ -12,6 +12,8 @@ import { account } from './routes/account';
 import { admin } from './routes/admin';
 import { stripe } from './routes/stripe';
 import { geo } from './routes/geo';
+import { runDailyTaskDigest, runWeeklySnapshot } from './services/admin-cron';
+import { log } from './lib/log';
 
 const app = new Hono<AppContext>();
 
@@ -64,10 +66,34 @@ app.route('/api/geo', geo);
 // Authed customer portal
 app.route('/api/account', account);
 
-// Admin
+// Admin (login/logout + CRM extras are registered inside `routes/admin.ts`,
+// public ones before requireAdmin and protected ones after).
 app.route('/admin', admin);
 
 app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
-export default app;
+// Cron triggers configured in wrangler.toml. Cloudflare matches against the
+// `cron` field; we dispatch by the schedule string so a single Worker can
+// host multiple cadences.
+export default {
+  fetch: app.fetch,
+  async scheduled(
+    event: { cron: string; scheduledTime: number },
+    env: import('./env').Env,
+    ctx: ExecutionContext,
+  ) {
+    const cron = event.cron;
+    try {
+      if (cron === '0 8 * * *') {
+        ctx.waitUntil(runDailyTaskDigest(env).then(() => {}));
+      } else if (cron === '0 6 * * 1') {
+        ctx.waitUntil(runWeeklySnapshot(env).then(() => {}));
+      } else {
+        log.warn({ msg: 'cron.unhandled', cron });
+      }
+    } catch (err) {
+      log.error({ msg: 'cron.failed', cron, err: err instanceof Error ? err.message : String(err) });
+    }
+  },
+};
