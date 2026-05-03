@@ -1,0 +1,1648 @@
+{
+  "version": "1.0.0",
+  "currency": "USD",
+  "regions": [
+    {
+      "id": "na",
+      "name": "North America",
+      "freightTier": 1,
+      "leadTimeAdderWeeks": 0
+    },
+    {
+      "id": "eu",
+      "name": "Europe",
+      "freightTier": 1,
+      "leadTimeAdderWeeks": 1
+    },
+    {
+      "id": "latam",
+      "name": "Latin America",
+      "freightTier": 2,
+      "leadTimeAdderWeeks": 2
+    },
+    {
+      "id": "mena",
+      "name": "Middle East / N. Africa",
+      "freightTier": 2,
+      "leadTimeAdderWeeks": 2
+    },
+    {
+      "id": "ssa",
+      "name": "Sub-Saharan Africa",
+      "freightTier": 3,
+      "leadTimeAdderWeeks": 3
+    },
+    {
+      "id": "apac",
+      "name": "Asia-Pacific",
+      "freightTier": 2,
+      "leadTimeAdderWeeks": 2
+    },
+    {
+      "id": "polar",
+      "name": "Polar / Antarctic",
+      "freightTier": 3,
+      "leadTimeAdderWeeks": 4
+    }
+  ],
+  "modules": [
+    {
+      "id": "core",
+      "name": "AXAL Core",
+      "sku": "AX-CORE-01",
+      "category": "Foundation",
+      "basePrice": 84000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "10ft",
+        "lengthFt": 10,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 2400,
+        "displayTons": "2.4 t"
+      },
+      "power": {
+        "drawKw": 1.2
+      },
+      "leadTimeWeeks": 4,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac",
+        "polar"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "grow",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "shell",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "care",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "learn",
+          "type": "data"
+        }
+      ],
+      "options": [
+        {
+          "id": "compute-base",
+          "name": "16-core EPYC / 64 GB",
+          "category": "Compute Tier",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "compute-hd"
+          ]
+        },
+        {
+          "id": "compute-hd",
+          "name": "32-core EPYC / 256 GB + GPU",
+          "category": "Compute Tier",
+          "default": false,
+          "priceDelta": 28000,
+          "weightDelta": 0,
+          "powerDelta": 1.8,
+          "requires": [],
+          "excludes": [
+            "compute-base"
+          ]
+        },
+        {
+          "id": "storage-8tb",
+          "name": "8 TB NVMe RAID-1",
+          "category": "Storage Tier",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "storage-32tb",
+            "storage-64tb"
+          ]
+        },
+        {
+          "id": "storage-32tb",
+          "name": "32 TB NVMe RAID-10",
+          "category": "Storage Tier",
+          "default": false,
+          "priceDelta": 6800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "storage-8tb",
+            "storage-64tb"
+          ]
+        },
+        {
+          "id": "storage-64tb",
+          "name": "64 TB NVMe + 200 TB cold",
+          "category": "Storage Tier",
+          "default": false,
+          "priceDelta": 14200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "storage-8tb",
+            "storage-32tb"
+          ]
+        },
+        {
+          "id": "net-1g",
+          "name": "1 GbE WAN",
+          "category": "Network",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "net-10g"
+          ]
+        },
+        {
+          "id": "net-10g",
+          "name": "10 GbE + SFP+ uplink",
+          "category": "Network",
+          "default": false,
+          "priceDelta": 4200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "net-1g"
+          ]
+        },
+        {
+          "id": "cooling-air",
+          "name": "Front-to-back air cooling",
+          "category": "Cooling",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "cooling-liquid"
+          ]
+        },
+        {
+          "id": "cooling-liquid",
+          "name": "Direct-liquid cooling loop",
+          "category": "Cooling",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": -0.4,
+          "requires": [
+            "compute-hd"
+          ],
+          "excludes": [
+            "cooling-air"
+          ]
+        },
+        {
+          "id": "power-input-dc",
+          "name": "800 V DC bus only",
+          "category": "Power Input",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "power-input-ac"
+          ]
+        },
+        {
+          "id": "power-input-ac",
+          "name": "800 V DC + 3-phase AC tie",
+          "category": "Power Input",
+          "default": false,
+          "priceDelta": 3200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "power-input-dc"
+          ]
+        },
+        {
+          "id": "climate-std",
+          "name": "Standard climate (-20…+45 °C)",
+          "category": "Climate Hardening",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "climate-arctic",
+            "climate-desert"
+          ]
+        },
+        {
+          "id": "climate-arctic",
+          "name": "Arctic pack (-55…+40 °C)",
+          "category": "Climate Hardening",
+          "default": false,
+          "priceDelta": 7400,
+          "weightDelta": 240,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "climate-std",
+            "climate-desert"
+          ]
+        },
+        {
+          "id": "climate-desert",
+          "name": "Desert pack (+5…+60 °C)",
+          "category": "Climate Hardening",
+          "default": false,
+          "priceDelta": 6200,
+          "weightDelta": 180,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "climate-std",
+            "climate-arctic"
+          ]
+        },
+        {
+          "id": "sec-baseline",
+          "name": "Baseline TPM + signed OS",
+          "category": "Security",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "sec-classified"
+          ]
+        },
+        {
+          "id": "sec-classified",
+          "name": "FIPS 140-3 + SCIF-ready",
+          "category": "Security",
+          "default": false,
+          "priceDelta": 18500,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "sec-baseline"
+          ]
+        },
+        {
+          "id": "ai-monitor",
+          "name": "Local AI anomaly + vision",
+          "category": "Monitoring & AI",
+          "default": false,
+          "priceDelta": 5400,
+          "weightDelta": 0,
+          "powerDelta": 0.6,
+          "requires": [
+            "compute-hd"
+          ],
+          "excludes": []
+        },
+        {
+          "id": "uplink-starlink",
+          "name": "Starlink + 5G + WAN trio",
+          "category": "Connectivity",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "uplink-iridium"
+          ]
+        },
+        {
+          "id": "uplink-iridium",
+          "name": "Iridium Certus + Starlink",
+          "category": "Connectivity",
+          "default": false,
+          "priceDelta": 4600,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "uplink-starlink"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "volt",
+      "name": "Volt",
+      "sku": "AX-VOLT-01",
+      "category": "Power",
+      "basePrice": 62000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 8600,
+        "displayTons": "8.6 t"
+      },
+      "power": {
+        "drawKw": 0.4,
+        "generationKw": 12,
+        "storageKwh": 60
+      },
+      "leadTimeWeeks": 5,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac",
+        "polar"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "power"
+        },
+        {
+          "targetModuleId": "grow",
+          "type": "power"
+        },
+        {
+          "targetModuleId": "shell",
+          "type": "power"
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "power"
+        },
+        {
+          "targetModuleId": "care",
+          "type": "power"
+        },
+        {
+          "targetModuleId": "learn",
+          "type": "power"
+        }
+      ],
+      "options": [
+        {
+          "id": "battery-60",
+          "name": "60 kWh LFP",
+          "category": "Battery",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "battery-120"
+          ]
+        },
+        {
+          "id": "battery-120",
+          "name": "120 kWh LFP",
+          "category": "Battery",
+          "default": false,
+          "priceDelta": 22000,
+          "weightDelta": 1100,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "battery-60"
+          ]
+        },
+        {
+          "id": "pv-12",
+          "name": "12 kWp bifacial",
+          "category": "PV Array",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "pv-18",
+            "pv-none"
+          ]
+        },
+        {
+          "id": "pv-18",
+          "name": "18 kWp bifacial + tracker",
+          "category": "PV Array",
+          "default": false,
+          "priceDelta": 8400,
+          "weightDelta": 280,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "pv-12",
+            "pv-none"
+          ]
+        },
+        {
+          "id": "pv-none",
+          "name": "No PV (grid / fuel cell)",
+          "category": "PV Array",
+          "default": false,
+          "priceDelta": -5200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "pv-12",
+            "pv-18"
+          ]
+        },
+        {
+          "id": "inverter-30",
+          "name": "30 kVA hybrid",
+          "category": "Inverter",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "inverter-60"
+          ]
+        },
+        {
+          "id": "inverter-60",
+          "name": "60 kVA grid-forming",
+          "category": "Inverter",
+          "default": false,
+          "priceDelta": 7200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "inverter-30"
+          ]
+        },
+        {
+          "id": "fuel-cell",
+          "name": "5 kW H2 fuel-cell inlet",
+          "category": "Backup",
+          "default": false,
+          "priceDelta": 14800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [
+            "battery-120"
+          ],
+          "excludes": []
+        },
+        {
+          "id": "diesel-inlet",
+          "name": "Diesel genset inlet",
+          "category": "Backup",
+          "default": false,
+          "priceDelta": 1800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "grid-tie-cert-na",
+          "name": "UL 1741-SA grid-tie",
+          "category": "Certifications",
+          "default": false,
+          "priceDelta": 3200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "grid-tie-cert-eu",
+          "name": "VDE-AR-N 4105 grid-tie",
+          "category": "Certifications",
+          "default": false,
+          "priceDelta": 3200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "climate-arctic",
+          "name": "Arctic battery pack",
+          "category": "Climate Hardening",
+          "default": false,
+          "priceDelta": 5400,
+          "weightDelta": 160,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "name": "Flow",
+      "sku": "AX-FLOW-01",
+      "category": "Water",
+      "basePrice": 58000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 7200,
+        "displayTons": "7.2 t"
+      },
+      "power": {
+        "drawKw": 2.4
+      },
+      "leadTimeWeeks": 5,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "grow",
+          "type": "fluid"
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "fluid"
+        },
+        {
+          "targetModuleId": "care",
+          "type": "fluid"
+        },
+        {
+          "targetModuleId": "shell",
+          "type": "fluid"
+        }
+      ],
+      "options": [
+        {
+          "id": "intake-borehole",
+          "name": "Borehole intake",
+          "category": "Source Intake",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "intake-surface",
+          "name": "Surface / river intake",
+          "category": "Source Intake",
+          "default": false,
+          "priceDelta": 2200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "intake-sea",
+          "name": "Sea-water intake (SWRO)",
+          "category": "Source Intake",
+          "default": false,
+          "priceDelta": 12400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "ro-single",
+          "name": "Single-stage RO",
+          "category": "Treatment",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "ro-dual"
+          ]
+        },
+        {
+          "id": "ro-dual",
+          "name": "Dual-stage RO + remineral.",
+          "category": "Treatment",
+          "default": false,
+          "priceDelta": 5800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "ro-single"
+          ]
+        },
+        {
+          "id": "uv-ozone",
+          "name": "UV + ozone polishing",
+          "category": "Disinfection",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "awg-200",
+          "name": "Atmospheric water (200 L/day)",
+          "category": "Atmospheric",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": 1.2,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "storage-4k",
+          "name": "4,000 L food-grade",
+          "category": "Storage",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "storage-8k"
+          ]
+        },
+        {
+          "id": "storage-8k",
+          "name": "8,000 L food-grade",
+          "category": "Storage",
+          "default": false,
+          "priceDelta": 3400,
+          "weightDelta": 220,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "storage-4k"
+          ]
+        },
+        {
+          "id": "greywater-loop",
+          "name": "Greywater reclamation loop",
+          "category": "Reuse",
+          "default": false,
+          "priceDelta": 4200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "lab-water",
+          "name": "USP lab-grade polish",
+          "category": "Treatment",
+          "default": false,
+          "priceDelta": 6400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [
+            "ro-dual"
+          ],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "grow",
+      "name": "Grow",
+      "sku": "AX-GROW-01",
+      "category": "Food",
+      "basePrice": 118000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "40ft-HC",
+        "lengthFt": 40,
+        "widthFt": 8,
+        "heightFt": 9.5
+      },
+      "weight": {
+        "kg": 11400,
+        "displayTons": "11.4 t"
+      },
+      "power": {
+        "drawKw": 8.5
+      },
+      "leadTimeWeeks": 7,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "fluid",
+          "required": true
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "fluid"
+        }
+      ],
+      "options": [
+        {
+          "id": "tiers-8",
+          "name": "8 NFT tiers",
+          "category": "Grow System",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "tiers-10"
+          ]
+        },
+        {
+          "id": "tiers-10",
+          "name": "10 NFT tiers (HC only)",
+          "category": "Grow System",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "tiers-8"
+          ]
+        },
+        {
+          "id": "led-leafy",
+          "name": "Leafy-greens LED recipe",
+          "category": "Lighting",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "led-fruit"
+          ]
+        },
+        {
+          "id": "led-fruit",
+          "name": "Fruiting-crop LED recipe",
+          "category": "Lighting",
+          "default": false,
+          "priceDelta": 6400,
+          "weightDelta": 0,
+          "powerDelta": 1.8,
+          "requires": [],
+          "excludes": [
+            "led-leafy"
+          ]
+        },
+        {
+          "id": "hvac-temperate",
+          "name": "Temperate HVAC",
+          "category": "Climate",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "hvac-tropical",
+            "hvac-arctic"
+          ]
+        },
+        {
+          "id": "hvac-tropical",
+          "name": "Tropical HVAC + dehumid.",
+          "category": "Climate",
+          "default": false,
+          "priceDelta": 5200,
+          "weightDelta": 0,
+          "powerDelta": 1.4,
+          "requires": [],
+          "excludes": [
+            "hvac-temperate",
+            "hvac-arctic"
+          ]
+        },
+        {
+          "id": "hvac-arctic",
+          "name": "Arctic HVAC + heat-pump",
+          "category": "Climate",
+          "default": false,
+          "priceDelta": 6800,
+          "weightDelta": 0,
+          "powerDelta": 1.6,
+          "requires": [],
+          "excludes": [
+            "hvac-temperate",
+            "hvac-tropical"
+          ]
+        },
+        {
+          "id": "haccp-pkg",
+          "name": "HACCP packing zone",
+          "category": "Compliance",
+          "default": false,
+          "priceDelta": 7200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "seed-library",
+          "name": "axalOS seed-recipe library",
+          "category": "Software",
+          "default": false,
+          "priceDelta": 1800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "shell",
+      "name": "Shell",
+      "sku": "AX-SHELL-01",
+      "category": "Habitat",
+      "basePrice": 74000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 6800,
+        "displayTons": "6.8 t"
+      },
+      "power": {
+        "drawKw": 1.5
+      },
+      "leadTimeWeeks": 6,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac",
+        "polar"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "fluid"
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "fluid"
+        }
+      ],
+      "options": [
+        {
+          "id": "layout-bunk",
+          "name": "8-bunk dormitory",
+          "category": "Layout",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-lab",
+            "layout-ward",
+            "layout-class",
+            "layout-office",
+            "layout-dc",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-lab",
+          "name": "Lab bench (BSL-2 ready)",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 12400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-ward",
+            "layout-class",
+            "layout-office",
+            "layout-dc",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-ward",
+          "name": "4-bed ward",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-lab",
+            "layout-class",
+            "layout-office",
+            "layout-dc",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-class",
+          "name": "Classroom (24 seats)",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 6400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-lab",
+            "layout-ward",
+            "layout-office",
+            "layout-dc",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-office",
+          "name": "Open office",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 5200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-lab",
+            "layout-ward",
+            "layout-class",
+            "layout-dc",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-dc",
+          "name": "Datacenter (hot-aisle)",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 18400,
+          "weightDelta": 0,
+          "powerDelta": 0.8,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-lab",
+            "layout-ward",
+            "layout-class",
+            "layout-office",
+            "layout-rf"
+          ]
+        },
+        {
+          "id": "layout-rf",
+          "name": "RF-shielded shelter",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 21600,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "layout-bunk",
+            "layout-lab",
+            "layout-ward",
+            "layout-class",
+            "layout-office",
+            "layout-dc"
+          ]
+        },
+        {
+          "id": "hvac-std",
+          "name": "Heat-pump + ERV",
+          "category": "HVAC",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "hvac-hepa"
+          ]
+        },
+        {
+          "id": "hvac-hepa",
+          "name": "HEPA + neg-pressure",
+          "category": "HVAC",
+          "default": false,
+          "priceDelta": 5800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "hvac-std"
+          ]
+        },
+        {
+          "id": "fume-hood",
+          "name": "Fume hood (lab only)",
+          "category": "Lab Fitout",
+          "default": false,
+          "priceDelta": 4200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [
+            "layout-lab"
+          ],
+          "excludes": []
+        },
+        {
+          "id": "climate-arctic",
+          "name": "Arctic insulation pkg",
+          "category": "Climate Hardening",
+          "default": false,
+          "priceDelta": 6200,
+          "weightDelta": 180,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "cycle",
+      "name": "Cycle",
+      "sku": "AX-CYCL-01",
+      "category": "Waste",
+      "basePrice": 96000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 9100,
+        "displayTons": "9.1 t"
+      },
+      "power": {
+        "drawKw": 1.8
+      },
+      "leadTimeWeeks": 6,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "fluid"
+        },
+        {
+          "targetModuleId": "grow",
+          "type": "fluid"
+        }
+      ],
+      "options": [
+        {
+          "id": "mbr-4",
+          "name": "MBR 4 m³/day",
+          "category": "Blackwater",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "mbr-8"
+          ]
+        },
+        {
+          "id": "mbr-8",
+          "name": "MBR 8 m³/day",
+          "category": "Blackwater",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "mbr-4"
+          ]
+        },
+        {
+          "id": "digester-200",
+          "name": "Anaerobic digester 200 kg/day",
+          "category": "Organics",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "digester-500"
+          ]
+        },
+        {
+          "id": "digester-500",
+          "name": "Anaerobic digester 500 kg/day",
+          "category": "Organics",
+          "default": false,
+          "priceDelta": 14200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "digester-200"
+          ]
+        },
+        {
+          "id": "pyrolysis",
+          "name": "Pyrolysis chamber 30 kg/day",
+          "category": "Solids",
+          "default": false,
+          "priceDelta": 11800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "biogas-chp",
+          "name": "Biogas CHP 5 kW",
+          "category": "Energy Recovery",
+          "default": false,
+          "priceDelta": 8600,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "compliance-eu",
+          "name": "EU 2020/741 reuse cert.",
+          "category": "Certifications",
+          "default": false,
+          "priceDelta": 3200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "compliance-na",
+          "name": "NSF/ANSI 350 reuse cert.",
+          "category": "Certifications",
+          "default": false,
+          "priceDelta": 3200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "care",
+      "name": "Care",
+      "sku": "AX-CARE-01",
+      "category": "Health",
+      "basePrice": 92000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 7400,
+        "displayTons": "7.4 t"
+      },
+      "power": {
+        "drawKw": 3.2
+      },
+      "leadTimeWeeks": 7,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "flow",
+          "type": "fluid",
+          "required": true
+        },
+        {
+          "targetModuleId": "shell",
+          "type": "data"
+        },
+        {
+          "targetModuleId": "cycle",
+          "type": "fluid"
+        }
+      ],
+      "options": [
+        {
+          "id": "exam-2",
+          "name": "2 curtained exam rooms",
+          "category": "Exam",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "exam-2-walled"
+          ]
+        },
+        {
+          "id": "exam-2-walled",
+          "name": "2 walled exam rooms",
+          "category": "Exam",
+          "default": false,
+          "priceDelta": 4200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "exam-2"
+          ]
+        },
+        {
+          "id": "neg-pressure",
+          "name": "Negative-pressure isolation",
+          "category": "Infection Control",
+          "default": false,
+          "priceDelta": 6800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [
+            "exam-2-walled"
+          ],
+          "excludes": []
+        },
+        {
+          "id": "lab-poc",
+          "name": "POC lab corner",
+          "category": "Lab",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "lab-pcr",
+          "name": "PCR-capable lab corner",
+          "category": "Lab",
+          "default": false,
+          "priceDelta": 12400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [
+            "neg-pressure"
+          ],
+          "excludes": []
+        },
+        {
+          "id": "pharmacy-cold",
+          "name": "180 L cold-chain pharmacy",
+          "category": "Pharmacy",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "pharmacy-ultra"
+          ]
+        },
+        {
+          "id": "pharmacy-ultra",
+          "name": "Ultra-cold (-80 °C) pharmacy",
+          "category": "Pharmacy",
+          "default": false,
+          "priceDelta": 9800,
+          "weightDelta": 0,
+          "powerDelta": 0.6,
+          "requires": [],
+          "excludes": [
+            "pharmacy-cold"
+          ]
+        },
+        {
+          "id": "telemedicine-4k",
+          "name": "4K telemedicine cart",
+          "category": "Telemedicine",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        },
+        {
+          "id": "ce-class-iia",
+          "name": "CE Class IIa certification",
+          "category": "Certifications",
+          "default": false,
+          "priceDelta": 5400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    },
+    {
+      "id": "learn",
+      "name": "Learn",
+      "sku": "AX-LRN-01",
+      "category": "Education",
+      "basePrice": 68000,
+      "currency": "USD",
+      "dimensions": {
+        "form": "20ft",
+        "lengthFt": 20,
+        "widthFt": 8,
+        "heightFt": 8.5
+      },
+      "weight": {
+        "kg": 5900,
+        "displayTons": "5.9 t"
+      },
+      "power": {
+        "drawKw": 1.6
+      },
+      "leadTimeWeeks": 5,
+      "regions": [
+        "na",
+        "eu",
+        "latam",
+        "mena",
+        "ssa",
+        "apac",
+        "polar"
+      ],
+      "interconnects": [
+        {
+          "targetModuleId": "core",
+          "type": "data",
+          "required": true
+        },
+        {
+          "targetModuleId": "volt",
+          "type": "power",
+          "required": true
+        },
+        {
+          "targetModuleId": "shell",
+          "type": "data"
+        }
+      ],
+      "options": [
+        {
+          "id": "seats-24",
+          "name": "24-seat fixed classroom",
+          "category": "Layout",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "seats-seminar",
+            "seats-maker"
+          ]
+        },
+        {
+          "id": "seats-seminar",
+          "name": "U-shape seminar (16)",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 1800,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "seats-24",
+            "seats-maker"
+          ]
+        },
+        {
+          "id": "seats-maker",
+          "name": "Maker / open layout",
+          "category": "Layout",
+          "default": false,
+          "priceDelta": 2400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "seats-24",
+            "seats-seminar"
+          ]
+        },
+        {
+          "id": "tablets-30",
+          "name": "30 rugged tablets",
+          "category": "Devices",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "tablets-60"
+          ]
+        },
+        {
+          "id": "tablets-60",
+          "name": "60 rugged tablets",
+          "category": "Devices",
+          "default": false,
+          "priceDelta": 8400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "tablets-30"
+          ]
+        },
+        {
+          "id": "lms-base",
+          "name": "Offline LMS + 16 TB lib.",
+          "category": "Software",
+          "default": true,
+          "priceDelta": 0,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "lms-secure"
+          ]
+        },
+        {
+          "id": "lms-secure",
+          "name": "Secure LMS (biometric)",
+          "category": "Software",
+          "default": false,
+          "priceDelta": 6400,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": [
+            "lms-base"
+          ]
+        },
+        {
+          "id": "maker-corner",
+          "name": "Maker corner (3D + electronics)",
+          "category": "Add-ons",
+          "default": false,
+          "priceDelta": 4200,
+          "weightDelta": 0,
+          "powerDelta": 0,
+          "requires": [],
+          "excludes": []
+        }
+      ]
+    }
+  ]
+}

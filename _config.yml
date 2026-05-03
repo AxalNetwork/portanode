@@ -75,6 +75,7 @@ include:
 
 exclude:
   - vendor
+  - configurator
   - Gemfile
   - Gemfile.lock
   - README.md

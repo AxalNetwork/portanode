@@ -20,6 +20,17 @@ purchase. This repo currently contains the brand foundation and theme shell.
 - `jekyll-feed`, `jekyll-seo-tag`, `jekyll-sitemap`, `jekyll-redirect-from`,
   `jekyll-include-cache`
 
+## Configurator
+Interactive Svelte + Vite app at `/configure/`. Source in `configurator/`,
+build outputs `assets/configurator/bundle.{js,css}` plus a lazy three.js
+chunk and copies of `catalog.json` / `stacks.json`. Build with:
+```bash
+cd configurator && npm install && npm run build
+```
+Three-column shell, click-a-module option modal, pure constraint engine
+(requires/excludes/region/power/footprint), short-id save+share via
+localStorage stub, deep-link entries `?c=`, `?stack=`, `?module=`.
+
 ## Catalog data
 Canonical product data lives in `_data/`:
 - `catalog.json` — 8 modules with `basePrice`, `dimensions`, `weight`, `power`,
