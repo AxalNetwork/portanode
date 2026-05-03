@@ -1,41 +1,63 @@
-# Snowlake Jekyll Theme
+# AXAL — Modular Infrastructure eCommerce
 
 ## Project Overview
-This is a Jekyll static website using the Snowlake theme (v2). It's a multi-purpose Jekyll theme with blog, portfolio, shop, and service page support.
+AXAL is a Jekyll + Tailwind static site for a modular infrastructure eCommerce
+platform. Customers browse modules, compose them into stacks, configure, and
+purchase. This repo currently contains the brand foundation and theme shell.
 
 ## Architecture
 - **Framework**: Jekyll 4.3.x (Ruby static site generator)
-- **Language**: Ruby
-- **Package Manager**: Bundler (gems stored in `vendor/bundle`)
+- **CSS**: Tailwind CSS 3 (compiled via npm/`tailwindcss` CLI)
+- **Hosting target**: Static (GitHub Pages / Cloudflare Pages compatible)
 
-## Key Plugins
-- `jekyll-feed` - RSS/Atom feed generation
-- `jekyll-paginate-v2` - Advanced pagination
-- `jekyll-archives` - Tag and category archives
+## Brand
+- Purple palette: `#6B21A8`, `#A855F7`, `#C084FC`
+- Off-black ink `#0B0B0F`, paper white `#FAFAF7`, technical gray `#6B7280`
+- Typography: Geist / Inter (sans), JetBrains Mono (mono), self-host via
+  `assets/fonts/` (see `assets/fonts/README.md`)
 
-## Directory Structure
-- `_posts/` - Blog posts
-- `_portfolio/` - Portfolio items
-- `_shop_items/` - Shop/product items
-- `_authors/` - Author profiles
-- `_layouts/` - Page layout templates
-- `_includes/` - Reusable template partials
-- `_data/` - Site data files (YAML)
-- `assets/` - CSS, JS, images
-- `_site/` - Built output (generated, not committed)
-- `vendor/bundle/` - Installed Ruby gems
+## Plugins
+- `jekyll-feed`, `jekyll-seo-tag`, `jekyll-sitemap`, `jekyll-redirect-from`,
+  `jekyll-include-cache`
 
 ## Collections
-- `authors` - Blog post authors
-- `shop_items` - Shop products (permalink: `/shop/:name`)
-- `portfolio` - Portfolio pieces (permalink: `/portfolio/:name`)
+- `_modules/` → `/modules/:slug/`
+- `_stacks/` → `/stacks/:slug/`
+- `_use_cases/` → `/use-cases/:slug/`
+- `_specs/` (data only, not output)
+- `_legal/` → `/legal/:slug/`
+
+## Layouts
+`default.html` → `page.html` / `module.html` / `stack.html` / `post.html` /
+`legal.html`
+
+## Includes
+`head.html`, `header.html`, `footer.html`, `cta.html`, `module-card.html`,
+`stack-card.html`, `spec-table.html`, `price-display.html`, `cookie-banner.html`,
+`analytics.html`, `logo.html`
+
+## Assets
+- `assets/css/tailwind.src.css` — Tailwind source (with `@layer components`)
+- `assets/css/tailwind.css` — compiled, **committed** for static hosting
+- `assets/logos/` — SVG logo variants (lockup, wordmark, monogram, knockout, favicon)
+- `assets/fonts/` — drop self-hosted woff2 files here
+- `scripts/optimize-images.sh` — `cwebp` / `avifenc` / `svgo` helper
 
 ## Development
-- **Run**: `bundle exec jekyll serve --host 0.0.0.0 --port 5000 --livereload`
-- **Build**: `bundle exec jekyll build`
-- **Port**: 5000
+```bash
+bundle install                 # one-time
+npm install                    # one-time
+npm run watch:css              # rebuild Tailwind on change
+bundle exec jekyll serve --host 0.0.0.0 --port 5000 --livereload
+```
+
+After changing template classes, rebuild the CSS:
+```bash
+npm run build:css
+```
 
 ## Deployment
 - **Type**: Static site
-- **Build command**: `bundle exec jekyll build`
-- **Public directory**: `_site`
+- **Build**: `npm run build:css && bundle exec jekyll build`
+- **Public dir**: `_site`
+- Port: 5000 (dev)

@@ -1,0 +1,69 @@
+{%- assign nav = site.data.navigation -%}
+<header class="sticky top-0 z-40 w-full border-b border-axal-gray-100 bg-axal-paper/85 backdrop-blur">
+  <div class="container-page flex h-16 items-center justify-between gap-6">
+    <a href="{{ '/' | relative_url }}" class="flex items-center gap-2 no-underline" aria-label="AXAL home">
+      {% include_cached logo.html variant="lockup" class="h-7 w-auto" %}
+    </a>
+
+    <nav aria-label="Primary" class="hidden md:flex items-center gap-1">
+      {% for item in nav.primary %}
+        {%- assign is_active = false -%}
+        {%- if page.url contains item.url and item.url != "/" -%}{%- assign is_active = true -%}{%- endif -%}
+        {% if item.mega %}
+          <div class="group relative">
+            <button type="button" class="nav-link inline-flex items-center gap-1 px-3 py-2 rounded-full hover:bg-axal-gray-50 {% if is_active %}nav-link-active{% endif %}" aria-haspopup="true" aria-expanded="false">
+              {{ item.text }}
+              <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="invisible absolute left-1/2 top-full z-50 mt-2 w-[640px] -translate-x-1/2 rounded-card border border-axal-gray-100 bg-white p-6 opacity-0 shadow-card transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100" role="menu">
+              <div class="grid grid-cols-3 gap-6">
+                {% for col in item.columns %}
+                  <div>
+                    <div class="mb-3 text-xs font-mono uppercase tracking-wider text-axal-gray">{{ col.heading }}</div>
+                    <ul class="space-y-3">
+                      {% for sub in col.items %}
+                        <li>
+                          <a href="{{ sub.url | relative_url }}" class="block group/sub no-underline">
+                            <div class="text-sm font-medium text-axal-ink group-hover/sub:text-axal-purple">{{ sub.text }}</div>
+                            {% if sub.description %}<div class="text-xs text-axal-gray">{{ sub.description }}</div>{% endif %}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="mt-6 flex items-center justify-between border-t border-axal-gray-100 pt-4 text-sm">
+                <span class="text-axal-gray">Mix and match modules into a deployable stack.</span>
+                <a href="{{ '/configure/' | relative_url }}" class="font-medium text-axal-purple no-underline hover:text-axal-purple-light">Open configurator →</a>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ item.url | relative_url }}" class="nav-link px-3 py-2 rounded-full hover:bg-axal-gray-50 {% if is_active %}nav-link-active{% endif %}">{{ item.text }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      {% for item in nav.secondary %}
+        {% if item.cta %}
+          <a href="{{ item.url | relative_url }}" class="btn btn-primary">{{ item.text }}</a>
+        {% else %}
+          <a href="{{ item.url | relative_url }}" class="hidden sm:inline-flex nav-link px-3 py-2">{{ item.text }}</a>
+        {% endif %}
+      {% endfor %}
+      <button type="button" class="md:hidden btn btn-ghost px-3 py-2" aria-label="Open menu" data-axal-mobile-toggle>
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="md:hidden hidden border-t border-axal-gray-100 bg-white" data-axal-mobile-menu>
+    <nav class="container-page flex flex-col gap-1 py-4" aria-label="Mobile">
+      {% for item in nav.primary %}
+        <a href="{{ item.url | relative_url }}" class="rounded-md px-2 py-2 text-sm hover:bg-axal-gray-50 no-underline text-axal-ink">{{ item.text }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+</header>

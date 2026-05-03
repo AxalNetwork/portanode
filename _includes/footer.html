@@ -1,0 +1,27 @@
+<footer class="mt-24 border-t border-axal-gray-100 bg-white">
+  <div class="container-page py-14">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_repeat(4,1fr)]">
+      <div>
+        <a href="{{ '/' | relative_url }}" class="inline-flex items-center gap-2 no-underline" aria-label="AXAL home">
+          {% include_cached logo.html variant="lockup" class="h-7 w-auto" %}
+        </a>
+        <p class="mt-4 max-w-xs text-sm text-axal-gray">{{ site.tagline }}</p>
+      </div>
+      {% for col in site.data.navigation.footer %}
+        <div>
+          <div class="mb-3 text-xs font-mono uppercase tracking-wider text-axal-gray">{{ col.heading }}</div>
+          <ul class="space-y-2">
+            {% for it in col.items %}
+              <li><a class="text-sm text-axal-ink no-underline hover:text-axal-purple" href="{{ it.url | relative_url }}">{{ it.text }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="mt-12 flex flex-col gap-3 border-t border-axal-gray-100 pt-6 text-xs text-axal-gray md:flex-row md:items-center md:justify-between">
+      <span>© {{ site.time | date: "%Y" }} {{ site.title }}. All rights reserved.</span>
+      <span class="font-mono">build · {{ site.time | date: "%Y.%m.%d" }}</span>
+    </div>
+  </div>
+</footer>
+{% include cookie-banner.html %}

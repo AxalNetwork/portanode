@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<article class="container-page py-14">
+  <nav class="mb-6 text-xs font-mono uppercase tracking-wider text-axal-gray" aria-label="Breadcrumb">
+    <a class="no-underline text-axal-gray hover:text-axal-purple" href="{{ '/modules/' | relative_url }}">Modules</a>
+    <span class="px-2">/</span>
+    <span class="text-axal-ink">{{ page.title }}</span>
+  </nav>
+
+  <header class="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-start">
+    <div>
+      {% if page.category %}<div class="text-xs font-mono uppercase tracking-wider text-axal-purple">{{ page.category }}</div>{% endif %}
+      <h1 class="mt-2">{{ page.title }}</h1>
+      {% if page.summary %}<p class="mt-4 max-w-2xl text-lg text-axal-gray-700">{{ page.summary }}</p>{% endif %}
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="{{ '/configure/' | relative_url }}?module={{ page.slug }}" class="btn btn-primary">Add to stack</a>
+        {% if page.datasheet %}<a href="{{ page.datasheet | relative_url }}" class="btn btn-outline">Datasheet</a>{% endif %}
+      </div>
+    </div>
+    <aside class="card">
+      {% if page.price %}
+        {% include price-display.html amount=page.price unit=page.price_unit %}
+        <div class="mt-1 text-xs text-axal-gray">Billed monthly. Cancel anytime.</div>
+      {% endif %}
+      {% if page.specs %}
+        <div class="mt-4">{% include spec-table.html specs=page.specs caption="At a glance" %}</div>
+      {% endif %}
+    </aside>
+  </header>
+
+  <div class="prose-axal mt-12">
+    {{ content }}
+  </div>
+</article>
+{% include cta.html %}

@@ -1,0 +1,20 @@
+{%- assign s = include.stack -%}
+<a href="{{ s.url | relative_url }}" class="card group block no-underline">
+  <div class="flex items-center gap-2">
+    <span class="badge badge-purple">Stack</span>
+    {% if s.tier %}<span class="badge font-mono">{{ s.tier }}</span>{% endif %}
+  </div>
+  <h3 class="mt-3 text-xl font-semibold text-axal-ink group-hover:text-axal-purple">{{ s.title }}</h3>
+  {% if s.summary %}<p class="mt-2 text-sm text-axal-gray-700">{{ s.summary }}</p>{% endif %}
+  {% if s.modules %}
+    <ul class="mt-4 flex flex-wrap gap-1.5">
+      {% for mod in s.modules %}
+        <li class="badge font-mono text-[11px]">{{ mod }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <div class="mt-5 flex items-end justify-between">
+    {% if s.price %}{% include price-display.html amount=s.price unit=s.price_unit %}{% else %}<span></span>{% endif %}
+    <span class="text-sm font-medium text-axal-purple">Configure →</span>
+  </div>
+</a>

@@ -1,0 +1,20 @@
+{%- assign heading = include.heading | default: "Ship infrastructure that actually fits." -%}
+{%- assign body = include.body | default: "Configure modules into a stack and deploy in minutes." -%}
+{%- assign primary_text = include.primary_text | default: "Open configurator" -%}
+{%- assign primary_url = include.primary_url | default: "/configure/" -%}
+{%- assign secondary_text = include.secondary_text | default: "Browse modules" -%}
+{%- assign secondary_url = include.secondary_url | default: "/modules/" -%}
+<section class="container-page my-20">
+  <div class="relative overflow-hidden rounded-card bg-axal-ink p-10 text-axal-paper md:p-14">
+    <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-axal-purple/40 blur-3xl" aria-hidden="true"></div>
+    <div class="absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-axal-purple-light/30 blur-3xl" aria-hidden="true"></div>
+    <div class="relative max-w-2xl">
+      <h2 class="text-3xl md:text-4xl font-semibold text-axal-paper">{{ heading }}</h2>
+      <p class="mt-4 text-axal-gray-100">{{ body }}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="{{ primary_url | relative_url }}" class="btn btn-primary">{{ primary_text }}</a>
+        <a href="{{ secondary_url | relative_url }}" class="btn btn-outline border-white/20 text-axal-paper hover:bg-white/10 hover:text-axal-paper hover:border-white/40">{{ secondary_text }}</a>
+      </div>
+    </div>
+  </div>
+</section>

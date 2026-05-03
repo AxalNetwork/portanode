@@ -1,0 +1,8 @@
+{%- assign amount = include.amount -%}
+{%- assign unit = include.unit | default: "/mo" -%}
+{%- assign currency = include.currency | default: "$" -%}
+<div class="price-display">
+  <span class="text-axal-gray">{{ currency }}</span>
+  <span class="price-amount">{{ amount }}</span>
+  <span class="price-unit">{{ unit }}</span>
+</div>

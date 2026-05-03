@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Geist";
+    src: local("Geist"),
+         url("/assets/fonts/Geist-Variable.woff2") format("woff2-variations"),
+         url("/assets/fonts/Geist-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Geist Mono";
+    src: local("Geist Mono"),
+         url("/assets/fonts/GeistMono-Variable.woff2") format("woff2-variations"),
+         url("/assets/fonts/GeistMono-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: local("Inter"),
+         url("/assets/fonts/Inter-Variable.woff2") format("woff2-variations"),
+         url("/assets/fonts/Inter-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: local("JetBrains Mono"),
+         url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2-variations"),
+         url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --axal-purple: #6B21A8;
+    --axal-purple-light: #A855F7;
+    --axal-purple-lighter: #C084FC;
+    --axal-ink: #0B0B0F;
+    --axal-paper: #FAFAF7;
+    --axal-gray: #6B7280;
+  }
+
+  html {
+    @apply antialiased text-axal-ink bg-axal-paper;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  body {
+    @apply font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tight text-axal-ink;
+  }
+
+  h1 { @apply text-4xl md:text-6xl font-semibold leading-[1.05]; }
+  h2 { @apply text-3xl md:text-4xl font-semibold leading-[1.1]; }
+  h3 { @apply text-2xl md:text-3xl font-semibold leading-tight; }
+  h4 { @apply text-xl md:text-2xl font-semibold; }
+
+  a { @apply text-axal-purple hover:text-axal-purple-light underline-offset-4; }
+  code, pre, kbd, samp { @apply font-mono; }
+
+  ::selection { background: #C084FC; color: #0B0B0F; }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-5 md:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-colors no-underline;
+  }
+  .btn-primary {
+    @apply bg-axal-purple text-white hover:bg-axal-purple-light;
+  }
+  .btn-secondary {
+    @apply bg-axal-ink text-axal-paper hover:bg-axal-gray-700;
+  }
+  .btn-ghost {
+    @apply text-axal-ink hover:bg-axal-gray-100;
+  }
+  .btn-outline {
+    @apply border border-axal-gray-200 text-axal-ink hover:border-axal-purple hover:text-axal-purple;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full border border-axal-gray-200 bg-white px-2.5 py-0.5 text-xs font-medium text-axal-gray-700;
+  }
+  .badge-purple {
+    @apply border-axal-purple-lighter bg-axal-purple-lighter/20 text-axal-purple;
+  }
+
+  .card {
+    @apply rounded-card border border-axal-gray-100 bg-white p-6 shadow-card transition-shadow hover:shadow-lg;
+  }
+
+  .spec-row {
+    @apply grid grid-cols-[1fr_auto] items-center gap-4 border-b border-axal-gray-100 py-3 text-sm last:border-b-0;
+  }
+  .spec-row dt { @apply text-axal-gray; }
+  .spec-row dd { @apply font-mono text-axal-ink; }
+
+  .price-display {
+    @apply flex items-baseline gap-1 font-mono;
+  }
+  .price-display .price-amount { @apply text-3xl font-semibold text-axal-ink; }
+  .price-display .price-unit { @apply text-sm text-axal-gray; }
+
+  .nav-link {
+    @apply text-sm text-axal-ink hover:text-axal-purple no-underline;
+  }
+  .nav-link-active {
+    @apply text-axal-purple;
+  }
+
+  .prose-axal {
+    @apply max-w-prose;
+  }
+  .prose-axal p { @apply my-4 leading-7 text-axal-gray-700; }
+  .prose-axal h2 { @apply mt-10 mb-4; }
+  .prose-axal h3 { @apply mt-8 mb-3; }
+  .prose-axal ul { @apply my-4 list-disc pl-6; }
+  .prose-axal ol { @apply my-4 list-decimal pl-6; }
+  .prose-axal li { @apply my-1.5; }
+  .prose-axal pre { @apply my-6 overflow-x-auto rounded-card bg-axal-ink p-4 text-axal-paper; }
+  .prose-axal code { @apply rounded bg-axal-gray-50 px-1.5 py-0.5 text-[0.92em]; }
+  .prose-axal pre code { @apply bg-transparent p-0 text-inherit; }
+}

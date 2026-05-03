@@ -1,0 +1,18 @@
+{%- comment -%}
+  Analytics is consent-gated. Replace SITE_ID with your provider key when ready.
+  Keeping a stub here ensures the include exists for layouts that reference it.
+{%- endcomment -%}
+{% if site.analytics_id %}
+<script>
+  (function(){
+    try{
+      if(localStorage.getItem("axal.cookie.consent") !== "accept") return;
+      var s=document.createElement("script");
+      s.defer=true;
+      s.src="https://plausible.io/js/script.js";
+      s.setAttribute("data-domain","{{ site.analytics_id }}");
+      document.head.appendChild(s);
+    }catch(e){}
+  })();
+</script>
+{% endif %}

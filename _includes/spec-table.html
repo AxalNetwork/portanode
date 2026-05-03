@@ -1,0 +1,11 @@
+{%- assign specs = include.specs -%}
+{%- assign caption = include.caption -%}
+<dl class="rounded-card border border-axal-gray-100 bg-white p-5">
+  {%- if caption -%}<div class="mb-2 text-xs font-mono uppercase tracking-wider text-axal-gray">{{ caption }}</div>{%- endif -%}
+  {% for row in specs %}
+    <div class="spec-row">
+      <dt>{{ row.label }}</dt>
+      <dd>{{ row.value }}{% if row.unit %} <span class="text-axal-gray">{{ row.unit }}</span>{% endif %}</dd>
+    </div>
+  {% endfor %}
+</dl>

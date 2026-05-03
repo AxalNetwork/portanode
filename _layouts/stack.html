@@ -1,0 +1,39 @@
+---
+layout: default
+---
+<article class="container-page py-14">
+  <nav class="mb-6 text-xs font-mono uppercase tracking-wider text-axal-gray" aria-label="Breadcrumb">
+    <a class="no-underline text-axal-gray hover:text-axal-purple" href="{{ '/stacks/' | relative_url }}">Stacks</a>
+    <span class="px-2">/</span>
+    <span class="text-axal-ink">{{ page.title }}</span>
+  </nav>
+
+  <header class="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-start">
+    <div>
+      <span class="badge badge-purple">Stack</span>
+      <h1 class="mt-3">{{ page.title }}</h1>
+      {% if page.summary %}<p class="mt-4 max-w-2xl text-lg text-axal-gray-700">{{ page.summary }}</p>{% endif %}
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="{{ '/configure/' | relative_url }}?stack={{ page.slug }}" class="btn btn-primary">Configure stack</a>
+        <a href="{{ '/modules/' | relative_url }}" class="btn btn-outline">See modules</a>
+      </div>
+    </div>
+    <aside class="card">
+      {% if page.price %}
+        {% include price-display.html amount=page.price unit=page.price_unit %}
+        <div class="mt-1 text-xs text-axal-gray">Starting price.</div>
+      {% endif %}
+      {% if page.modules %}
+        <div class="mt-4 text-xs font-mono uppercase tracking-wider text-axal-gray">Includes</div>
+        <ul class="mt-2 flex flex-wrap gap-1.5">
+          {% for m in page.modules %}<li class="badge font-mono text-[11px]">{{ m }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    </aside>
+  </header>
+
+  <div class="prose-axal mt-12">
+    {{ content }}
+  </div>
+</article>
+{% include cta.html heading="Make this stack yours." %}

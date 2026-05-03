@@ -1,0 +1,41 @@
+{%- assign page_title = page.title | default: site.title -%}
+{%- assign full_title = page_title -%}
+{%- if page.title and page.url != "/" -%}
+  {%- assign full_title = page.title | append: " · " | append: site.title -%}
+{%- elsif page.url == "/" -%}
+  {%- assign full_title = site.title | append: " — " | append: site.tagline -%}
+{%- endif -%}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="{{ site.brand.primary }}" />
+<title>{{ full_title }}</title>
+<meta name="description" content="{{ page.description | default: site.description | strip_newlines }}" />
+<link rel="canonical" href="{{ page.url | absolute_url }}" />
+<link rel="icon" href="{{ '/assets/logos/favicon.svg' | relative_url }}" type="image/svg+xml" />
+<link rel="alternate icon" href="{{ '/assets/logos/favicon-32.svg' | relative_url }}" sizes="32x32" />
+<link rel="apple-touch-icon" href="{{ '/assets/logos/axal-monogram.svg' | relative_url }}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ full_title }}" />
+<meta property="og:description" content="{{ page.description | default: site.description | strip_newlines }}" />
+<meta property="og:url" content="{{ page.url | absolute_url }}" />
+<meta property="og:site_name" content="{{ site.title }}" />
+<meta name="twitter:card" content="summary_large_image" />
+
+{% seo title=false %}
+{% feed_meta %}
+
+{%- comment -%} Critical inline CSS {%- endcomment -%}
+<style>
+  :root{--axal-purple:#6B21A8;--axal-purple-light:#A855F7;--axal-purple-lighter:#C084FC;--axal-ink:#0B0B0F;--axal-paper:#FAFAF7;--axal-gray:#6B7280}
+  html{background:var(--axal-paper);color:var(--axal-ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{margin:0;font-family:Geist,Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+  a{color:var(--axal-purple);text-decoration:none}
+  .axal-skip{position:absolute;left:-9999px;top:auto}
+  .axal-skip:focus{left:1rem;top:1rem;background:#0B0B0F;color:#FAFAF7;padding:.5rem 1rem;border-radius:.5rem;z-index:100}
+</style>
+
+<link rel="preload" as="font" type="font/woff2" href="{{ '/assets/fonts/Geist-Variable.woff2' | relative_url }}" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="{{ '/assets/fonts/JetBrainsMono-Variable.woff2' | relative_url }}" crossorigin />
+<link rel="preload" as="style" href="{{ '/assets/css/tailwind.css' | relative_url }}" />
+<link rel="stylesheet" href="{{ '/assets/css/tailwind.css' | relative_url }}" />
+{% include analytics.html %}

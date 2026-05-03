@@ -1,0 +1,24 @@
+{%- assign variant = include.variant | default: "lockup" -%}
+{%- assign cls = include.class | default: "h-7 w-auto" -%}
+{%- case variant -%}
+{%- when "monogram" -%}
+<svg class="{{ cls }}" viewBox="0 0 32 32" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="#0B0B0F"/>
+  <path d="M9 23 L16 8 L23 23 M11.8 18 H20.2" stroke="#C084FC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
+{%- when "wordmark" -%}
+<svg class="{{ cls }}" viewBox="0 0 120 28" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <text x="0" y="22" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="22" letter-spacing="0.04em" fill="#0B0B0F">AXAL</text>
+</svg>
+{%- when "knockout" -%}
+<svg class="{{ cls }}" viewBox="0 0 140 32" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <rect width="140" height="32" rx="6" fill="#0B0B0F"/>
+  <text x="14" y="22" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="18" letter-spacing="0.08em" fill="#FAFAF7">AXAL</text>
+</svg>
+{%- else -%}
+<svg class="{{ cls }}" viewBox="0 0 132 32" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="2" width="28" height="28" rx="7" fill="#0B0B0F"/>
+  <path d="M7 25 L14 9 L21 25 M9.6 19.6 H18.4" stroke="#C084FC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="38" y="22" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="20" letter-spacing="0.06em" fill="#0B0B0F">AXAL</text>
+</svg>
+{%- endcase -%}

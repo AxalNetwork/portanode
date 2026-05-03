@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264 64" width="264" height="64">
+  <rect x="0" y="4" width="56" height="56" rx="14" fill="#0B0B0F"/>
+  <path d="M14 50 L28 18 L42 50 M19.2 39.6 H36.8" stroke="#C084FC" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="76" y="44" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="40" letter-spacing="0.06em" fill="#0B0B0F">AXAL</text>
+</svg>
