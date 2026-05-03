@@ -1,16 +1,16 @@
 ---
 layout: default
 title: AXAL
-description: Modular, container-shippable infrastructure. Configure power, water, food, shelter, compute, and care into a stack you can deploy anywhere on Earth.
+description: Steel ISO shipping containers retrofitted as plug-and-play infrastructure modules. Power, water, food, shelter, compute, and care that snap together on site, anywhere on Earth.
 ---
 
 <section class="container-page pt-16 pb-20 md:pt-24 md:pb-24">
   <div class="grid gap-10 md:grid-cols-[1.3fr_1fr] md:items-center">
     <div>
       <span class="badge badge-purple font-mono">v1 · now shipping</span>
-      <h1 class="mt-5">Modular infrastructure,<br/><span class="text-axal-purple">built to ship.</span></h1>
+      <h1 class="mt-5">Hardware in a box.<br/><span class="text-axal-purple">Literally.</span></h1>
       <p class="mt-6 max-w-xl text-lg text-axal-gray-700">
-        Eight container-scale modules — power, water, food, shelter, compute, care — that snap together over a single interconnect. Configure your stack, get a quote, and deploy on six continents.
+        Eight steel ISO shipping containers — power, water, food, shelter, compute, care — pre-fitted at our factory and bolted together on your site. 20-ft and 40-ft modules, one mechanical and electrical interconnect, real equipment inside: server racks, batteries, PV canopies, hydroponic trays, exam suites.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="/configure/" class="btn btn-primary">Configure your stack</a>
@@ -26,19 +26,47 @@ description: Modular, container-shippable infrastructure. Configure power, water
       <div class="absolute inset-0 -z-10 rounded-card bg-gradient-to-br from-axal-purple-lighter/40 via-transparent to-axal-purple/30 blur-2xl" aria-hidden="true"></div>
       <div class="card">
         <div class="flex items-center justify-between">
-          <span class="badge font-mono">stack.yaml</span>
-          <span class="text-xs text-axal-gray font-mono">preview</span>
+          <span class="badge font-mono">BOM · OFF-GRID CLINIC</span>
+          <span class="text-xs text-axal-gray font-mono">5 containers</span>
         </div>
-        <pre class="mt-4 overflow-x-auto rounded-md bg-axal-ink p-4 text-xs leading-6 text-axal-paper"><code>name: off-grid-clinic
-modules:
-  - core:   1x  hub
-  - volt:   2x  60kWh
-  - flow:   1x  potable
-  - care:   1x  exam-2
-  - shell:  1x  4-bed
-region: kenya
-ship: true</code></pre>
-        <div class="mt-4 flex items-center justify-between">
+        <ul class="mt-4 divide-y divide-axal-gray-100 text-sm">
+          <li class="flex items-baseline justify-between gap-3 py-2.5">
+            <div>
+              <div class="font-medium text-axal-ink">Core · 20-ft HC</div>
+              <div class="text-xs text-axal-gray">Server rack · uplink · BMS</div>
+            </div>
+            <div class="font-mono text-xs text-axal-gray">×1 · 4.2 t</div>
+          </li>
+          <li class="flex items-baseline justify-between gap-3 py-2.5">
+            <div>
+              <div class="font-medium text-axal-ink">Volt · 20-ft HC</div>
+              <div class="text-xs text-axal-gray">PV canopy · 60 kWh LFP</div>
+            </div>
+            <div class="font-mono text-xs text-axal-gray">×2 · 8.1 t ea.</div>
+          </li>
+          <li class="flex items-baseline justify-between gap-3 py-2.5">
+            <div>
+              <div class="font-medium text-axal-ink">Flow · 20-ft HC</div>
+              <div class="text-xs text-axal-gray">RO + UV · 4 kL potable</div>
+            </div>
+            <div class="font-mono text-xs text-axal-gray">×1 · 6.7 t</div>
+          </li>
+          <li class="flex items-baseline justify-between gap-3 py-2.5">
+            <div>
+              <div class="font-medium text-axal-ink">Care · 20-ft HC</div>
+              <div class="text-xs text-axal-gray">2-bay exam · cold-chain</div>
+            </div>
+            <div class="font-mono text-xs text-axal-gray">×1 · 5.4 t</div>
+          </li>
+          <li class="flex items-baseline justify-between gap-3 py-2.5">
+            <div>
+              <div class="font-medium text-axal-ink">Shell · 40-ft HC</div>
+              <div class="text-xs text-axal-gray">4-bunk staff quarters</div>
+            </div>
+            <div class="font-mono text-xs text-axal-gray">×1 · 9.8 t</div>
+          </li>
+        </ul>
+        <div class="mt-4 flex items-center justify-between border-t border-axal-gray-100 pt-3">
           {% include price-display.html amount="412k" unit="from" %}
           <a href="/configure/?stack=off-grid-clinic" class="text-sm font-medium text-axal-purple no-underline">Configure →</a>
         </div>
@@ -51,8 +79,8 @@ ship: true</code></pre>
   <div class="flex items-end justify-between gap-6">
     <div>
       <div class="text-xs font-mono uppercase tracking-wider text-axal-purple">The catalog</div>
-      <h2 class="mt-2">Eight modules. One interconnect.</h2>
-      <p class="mt-3 max-w-xl text-axal-gray-700">Every AXAL module fits a 20-ft ISO footprint and shares the same power, data, and fluid couplings. Mix any combination.</p>
+      <h2 class="mt-2">Eight containers. One interconnect.</h2>
+      <p class="mt-3 max-w-xl text-axal-gray-700">Every AXAL module is a steel ISO shipping container — 20-ft or 40-ft — retrofitted with real hardware and wired to the same power, data, and fluid couplings. Crane them off the truck, bolt them together, energise.</p>
     </div>
     <a href="/modules/" class="hidden md:inline-flex btn btn-outline">All modules</a>
   </div>
