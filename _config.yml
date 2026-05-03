@@ -85,6 +85,7 @@ include:
 exclude:
   - vendor
   - configurator
+  - account
   - Gemfile
   - Gemfile.lock
   - README.md

@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<section class="container-page py-10" style="max-width:1200px;">
+  {% if page.eyebrow %}<div class="text-xs font-mono uppercase tracking-wider text-axal-purple">{{ page.eyebrow }}</div>{% endif %}
+  {% if page.title %}<h1 class="sr-only">{{ page.title }}</h1>{% endif %}
+
+  <link rel="stylesheet" href="{{ '/assets/account/bundle.css' | relative_url }}" />
+  <noscript>
+    <div class="mt-8 p-6 rounded-card border border-axal-gray-100 bg-axal-gray-50">
+      The customer portal requires JavaScript. <a href="/contact/" class="text-axal-purple underline">Contact our team</a>
+      and we'll help you with your order, quote, or configuration directly.
+    </div>
+  </noscript>
+
+  <div id="axal-account" data-portal-mount></div>
+
+  <script>
+    window.AXAL_API_BASE = {{ site.api_base_url | default: '' | jsonify }};
+    window.AXAL_TURNSTILE_SITE_KEY = {{ site.turnstile_site_key | default: '' | jsonify }};
+  </script>
+  <script type="module" src="{{ '/assets/account/bundle.js' | relative_url }}"></script>
+
+  {% if content and content != "" %}
+    <div class="mt-12 prose-axal text-sm text-axal-gray-700">
+      {{ content }}
+    </div>
+  {% endif %}
+</section>

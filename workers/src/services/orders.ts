@@ -16,6 +16,9 @@ export const OrderPatch = z.object({
   shippedAt: z.number().int().positive().nullable().optional(),
   deliveredAt: z.number().int().positive().nullable().optional(),
   shippingAddress: z.record(z.string(), z.unknown()).optional(),
+  trackingCarrier: z.string().max(80).nullable().optional(),
+  trackingNumber: z.string().max(80).nullable().optional(),
+  trackingUrl: z.string().url().nullable().optional(),
 });
 
 export async function listOrdersForCustomer(env: Env, customerId: string) {
@@ -69,6 +72,9 @@ export async function patchOrderAdmin(
     args.push(JSON.stringify(patch.shippingAddress));
     changed.shippingAddress = true;
   }
+  if (patch.trackingCarrier !== undefined) { sets.push('tracking_carrier = ?'); args.push(patch.trackingCarrier); changed.trackingCarrier = patch.trackingCarrier; }
+  if (patch.trackingNumber !== undefined) { sets.push('tracking_number = ?'); args.push(patch.trackingNumber); changed.trackingNumber = patch.trackingNumber; }
+  if (patch.trackingUrl !== undefined) { sets.push('tracking_url = ?'); args.push(patch.trackingUrl); changed.trackingUrl = patch.trackingUrl; }
   if (sets.length === 0) return order;
   sets.push('updated_at = ?');
   args.push(Date.now());
@@ -182,6 +188,9 @@ function hydrateOrder(r: Record<string, unknown>) {
     expectedShipAt: r.expected_ship_at ? Number(r.expected_ship_at) : null,
     shippedAt: r.shipped_at ? Number(r.shipped_at) : null,
     deliveredAt: r.delivered_at ? Number(r.delivered_at) : null,
+    trackingCarrier: (r.tracking_carrier as string) ?? null,
+    trackingNumber: (r.tracking_number as string) ?? null,
+    trackingUrl: (r.tracking_url as string) ?? null,
     cancelledAt: r.cancelled_at ? Number(r.cancelled_at) : null,
     createdAt: Number(r.created_at),
     updatedAt: Number(r.updated_at),

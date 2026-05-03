@@ -6,7 +6,9 @@
     "build:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --minify",
     "watch:css": "tailwindcss -i ./assets/css/tailwind.src.css -o ./assets/css/tailwind.css --watch",
     "validate:catalog": "node scripts/validate-catalog.js",
-    "prebuild:css": "node scripts/validate-catalog.js"
+    "prebuild:css": "node scripts/validate-catalog.js",
+    "build:configurator": "cd configurator && npm install && npm run build",
+    "build:account": "cd account && npm install && npm run build"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

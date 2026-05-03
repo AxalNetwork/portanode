@@ -27,6 +27,23 @@ chunk and copies of `catalog.json` / `stacks.json`. Build with:
 ```bash
 cd configurator && npm install && npm run build
 ```
+
+## Customer portal
+Logged-in customer area at `/account/` (Jekyll page → Svelte SPA mounted at
+`#axal-account`). Source in `account/`, builds to
+`assets/account/bundle.{js,css}` (≤ 90 KB JS budget). Hash-based router
+(`#/dashboard`, `#/orders/:id`, `#/quotes`, `#/configurations`, `#/profile`,
+`#/privacy`). Auth flow: magic-link via `/api/auth/magic-link` →
+`/api/auth/magic` sets the `axal_session` cookie, the SPA reads CSRF from
+`/api/auth/me`. Backend routes in `workers/src/routes/account.ts` cover
+orders + timeline + ops messages, quotes (with portal-authenticated Stripe
+Checkout that bypasses the signed-link token), saved configurations
+(list / duplicate / deep-link edit), profile (mirrors to Stripe customer),
+and privacy self-service (`POST /export` returns full JSON; `POST /delete`
+queues an erasure request). Migration `0008_account_portal.sql` adds
+billing/shipping/contacts/VAT columns to `customers`, the `stripe_customer_id`
+column, and the `privacy_requests` ledger.
+
 Three-column shell, click-a-module option modal, pure constraint engine
 (requires/excludes/region/power/footprint), short-id save+share via
 localStorage stub, deep-link entries `?c=`, `?stack=`, `?module=`.
