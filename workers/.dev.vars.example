@@ -1,0 +1,18 @@
+# Local development secrets. Copy to `.dev.vars` and fill in.
+# `.dev.vars` is git-ignored. Production secrets go via `wrangler secret put`.
+
+# JWT signing key (HS256). Generate with: openssl rand -base64 48
+JWT_SECRET="replace-me-with-a-long-random-string"
+
+# Resend API key (https://resend.com)
+RESEND_API_KEY="re_xxx"
+
+# Cloudflare Turnstile (https://developers.cloudflare.com/turnstile/)
+TURNSTILE_SECRET_KEY="0x4AAAAAAA-test-secret"
+
+# Admin API token (long, random; rotate via wrangler secret put)
+ADMIN_API_TOKEN="replace-me-with-a-long-random-token"
+
+# Stripe keys (used by the next task; placeholders here so dev runs cleanly)
+STRIPE_SECRET_KEY=""
+STRIPE_WEBHOOK_SECRET=""

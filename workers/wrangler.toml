@@ -1,0 +1,81 @@
+name = "axal-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-27"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Public-facing variables (non-secret). Secrets go via `wrangler secret put`
+# or `.dev.vars` for local development. See `.dev.vars.example`.
+[vars]
+ENVIRONMENT = "development"
+APP_BASE_URL = "http://localhost:5000"
+API_BASE_URL = "http://localhost:8787"
+EMAIL_FROM = "AXAL <no-reply@axal.example>"
+EMAIL_REPLY_TO = "hello@axal.example"
+JWT_ISSUER = "axal-api"
+JWT_AUDIENCE = "axal-portal"
+SESSION_COOKIE_NAME = "axal_session"
+SESSION_TTL_DAYS = "30"
+MAGIC_LINK_TTL_MIN = "15"
+
+# --- D1 ---
+[[d1_databases]]
+binding = "DB"
+database_name = "axal-db"
+database_id = "00000000-0000-0000-0000-000000000000" # replace via wrangler
+migrations_dir = "migrations"
+
+# --- KV ---
+[[kv_namespaces]]
+binding = "CACHE"
+id = "00000000000000000000000000000000" # replace via wrangler
+
+# --- R2 ---
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "axal-assets"
+
+# --- Rate limiting (Cloudflare unsafe rate limit API; bind separate limiters) ---
+[[unsafe.bindings]]
+name = "RL_CONTACT"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 3, period = 60 }
+
+[[unsafe.bindings]]
+name = "RL_CONFIG"
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 60, period = 60 }
+
+[[unsafe.bindings]]
+name = "RL_AUTH"
+type = "ratelimit"
+namespace_id = "1003"
+simple = { limit = 5, period = 300 }
+
+# --- Staging environment overrides ---
+[env.staging]
+name = "axal-api-staging"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+APP_BASE_URL = "https://staging.axal.example"
+API_BASE_URL = "https://api-staging.axal.example"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "axal-db-staging"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = "00000000000000000000000000000000"
+
+[[env.staging.r2_buckets]]
+binding = "ASSETS"
+bucket_name = "axal-assets-staging"
+
+[observability]
+enabled = true

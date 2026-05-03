@@ -1,0 +1,22 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Inter, Geist, Helvetica, Arial, sans-serif" />
+      <mj-text color="#0B0B0F" font-size="15px" line-height="1.55" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#FAFAF7">
+    <mj-section padding="24px 28px" border-bottom="1px solid #eee" background-color="#ffffff">
+      <mj-column>
+        <mj-text font-weight="700" color="#6B21A8">AXAL</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="28px" background-color="#ffffff">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700">Leasing inquiry received</mj-text>
+        <mj-text>Thanks {{name}}, our financing partner will reach out within two business days with options for {{region}}.</mj-text>
+        <mj-text font-size="13px" color="#6B7280">Reference: {{leadId}}</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

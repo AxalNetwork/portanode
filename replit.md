@@ -31,6 +31,21 @@ Three-column shell, click-a-module option modal, pure constraint engine
 (requires/excludes/region/power/footprint), short-id save+share via
 localStorage stub, deep-link entries `?c=`, `?stack=`, `?module=`.
 
+## Backend (`workers/`)
+Cloudflare Workers + Hono + D1 + KV + R2 + Resend. Powers configuration
+persistence, quotes, leads (contact / leasing / spec-download), passwordless
+customer auth (magic link → HttpOnly JWT cookie + CSRF), customer portal
+endpoints, and admin endpoints gated by `ADMIN_API_TOKEN`. D1 migrations in
+`workers/migrations/` cover `customers`, `magic_links`, `sessions`,
+`configurations`, `quotes`, `orders`, `order_notes`, `invoices`, `events`
+(append-only audit log), `leads`, `email_subscriptions`, and
+`manufacturing_capacity`. Email service in `workers/src/email/` ships hand-
+tuned inline HTML in the runtime plus MJML sources compiled at deploy time.
+Turnstile + Cloudflare unsafe rate-limit bindings guard public POSTs.
+Local dev: `cd workers && cp .dev.vars.example .dev.vars && npm install &&
+npm run migrate:local && npm run dev`. Stripe checkout + webhook glue lands
+in the next task.
+
 ## Catalog data
 Canonical product data lives in `_data/`:
 - `catalog.json` — 8 modules with `basePrice`, `dimensions`, `weight`, `power`,
